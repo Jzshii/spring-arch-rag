@@ -1,0 +1,17 @@
+package model;
+
+public enum ArchitecturalRole {
+    CONTROLLER,
+    SERVICE,
+    REPOSITORY,
+    ENTITY,
+    COMPONENT,
+    SERVICE_CLIENT,
+    CONFIGURATION,
+    DTO,
+    EXCEPTION_HANDLER,
+    EVENT_LISTENER,
+    SCHEDULER,
+    SECURITY_COMPONENT,
+    UNKNOWN
+}

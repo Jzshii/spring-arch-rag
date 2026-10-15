@@ -1,0 +1,182 @@
+[
+  {
+    "question": "What annotations does ApiGatewayController have?",
+    "ground_truth": "ApiGatewayController is annotated with @RestController and @RequestMapping.",
+    "category": "single-class"
+  },
+  {
+    "question": "What is the role of CustomersServiceClient in the application?",
+    "ground_truth": "CustomersServiceClient is a SERVICE_CLIENT component annotated with @Component that uses a WebClient.Builder to call the remote customers-service via HTTP. It provides a getOwner() method for fetching owner details from the customers microservice.",
+    "category": "single-class"
+  },
+  {
+    "question": "Which fields does VisitsServiceClient have?",
+    "ground_truth": "VisitsServiceClient has fields: hostname (String) and webClientBuilder (WebClient.Builder). It is used to call the remote visits-service.",
+    "category": "single-class"
+  },
+  {
+    "question": "What methods does PetclinicTools expose?",
+    "ground_truth": "PetclinicTools exposes four methods: listOwners, addOwnerToPetclinic, listVets, and addPetToOwner. It delegates to AIDataProvider for all data retrieval and mutation.",
+    "category": "single-class"
+  },
+  {
+    "question": "What fields does the Visit entity have?",
+    "ground_truth": "Visit has fields: id (Integer), date (Date), description (String), and petId (int). It is a JPA entity annotated with @Entity and @Table.",
+    "category": "single-class"
+  },
+  {
+    "question": "What is the role of AIDataProvider?",
+    "ground_truth": "AIDataProvider is a @Service that provides data to the GenAI layer. It holds a VectorStore, a RestClient, and a DiscoveryClient. getAllOwners, addPetToOwner, and addOwnerToPetclinic use the RestClient (via getCustomerServiceUri()) to fetch or modify data on the remote customers-service. getVets() makes no HTTP call — it performs a local VectorStore similarity search over vet data pre-loaded at startup.",
+    "category": "single-class"
+  },
+  {
+    "question": "How does ApiGatewayController communicate with the customers microservice?",
+    "ground_truth": "ApiGatewayController injects CustomersServiceClient and VisitsServiceClient. CustomersServiceClient uses WebClient to call the remote customers-service, so ApiGatewayController fetches owner details via CustomersServiceClient.getOwner().",
+    "category": "cross-layer"
+  },
+  {
+    "question": "How does PetclinicChatClient interact with PetclinicTools?",
+    "ground_truth": "PetclinicChatClient injects PetclinicTools via constructor and registers it as a tool provider on the ChatClient (.defaultTools(petclinicTools)). At runtime, the LLM itself decides whether to invoke a PetclinicTools method during chatClient.call() inside exchange() — exchange() does not explicitly call PetclinicTools methods itself. PetclinicTools in turn calls AIDataProvider.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "Which service does VisitsServiceClient call and how?",
+    "ground_truth": "VisitsServiceClient calls the remote visits-service by constructing HTTP requests via WebClient.Builder. It uses the hostname field to build the base URL (http://visits-service/) and provides getVisitsForPets() for fetching visits for a list of pet IDs.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "How does VetResource access vet data?",
+    "ground_truth": "VetResource injects VetRepository via constructor injection and calls it in showResourcesVetList() to retrieve all vets. It is a @RestController so it exposes the result as an HTTP response.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "How does PetResource handle pet creation?",
+    "ground_truth": "PetResource injects PetRepository and OwnerRepository. Its processCreationForm() method retrieves the owner from OwnerRepository, creates a new Pet entity, and saves it via PetRepository.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "How does VisitResource store visits?",
+    "ground_truth": "VisitResource injects VisitRepository. The create() method receives a Visit entity and persists it via VisitRepository.save(). The read() method retrieves visits by petId using VisitRepository.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "Does AIDataProvider.getVets() call the vets-service over HTTP?",
+    "ground_truth": "No. AIDataProvider.getVets() performs a local similarity search against the VectorStore (vectorStore.similaritySearch()) and returns formatted document content — it makes no HTTP call. AIDataProvider's RestClient (via getCustomerServiceUri()) only targets customers-service, used by getAllOwners, addPetToOwner, and addOwnerToPetclinic. The actual HTTP call to vets-service happens separately, in VectorStoreController.loadVetDataToVectorStoreOnStartup(), which seeds the VectorStore once at application startup.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "What JPA relationship does Vet have with Specialty?",
+    "ground_truth": "Vet has a many-to-many relationship with Specialty. The specialties field is of type Set<Specialty> and is mapped with a @ManyToMany JPA annotation.",
+    "category": "jpa"
+  },
+  {
+    "question": "What JPA relationship does Pet have with Owner?",
+    "ground_truth": "Pet has a many-to-one relationship with Owner. The owner field is of type Owner and is annotated with @ManyToOne in JPA.",
+    "category": "jpa"
+  },
+  {
+    "question": "Which repositories are responsible for managing the Owner entity?",
+    "ground_truth": "OwnerRepository manages the Owner entity. It is a Spring Data JPA repository (extends JpaRepository) and is used by OwnerResource to create, find, and update Owner records.",
+    "category": "jpa"
+  },
+  {
+    "question": "What does VisitRepository provide?",
+    "ground_truth": "VisitRepository is a Spring Data JPA repository for Visit entities. It provides findByPetId() and findByPetIdIn() query methods for looking up visits associated with one or multiple pet IDs.",
+    "category": "jpa"
+  },
+  {
+    "question": "How is the Pet entity related to PetType?",
+    "ground_truth": "Pet has a field type of type PetType, mapped with a JPA relationship. PetType is a separate entity with its own id and name fields. PetRepository exposes findPetTypes() and findPetTypeById() for querying available pet types.",
+    "category": "jpa"
+  },
+  {
+    "question": "Which repositories manage data in the visits-service?",
+    "ground_truth": "VisitRepository manages Visit entities in the visits-service. It provides findByPetId() and findByPetIdIn() and is injected into VisitResource.",
+    "category": "jpa"
+  },
+  {
+    "question": "What JPA annotations does the Owner entity have?",
+    "ground_truth": "Owner is annotated with @Entity and @Table, marking it as a JPA-managed persistent entity stored in a database table.",
+    "category": "jpa"
+  },
+  {
+    "question": "Describe the full request flow when a client requests owner details from the API gateway.",
+    "ground_truth": "A client sends an HTTP request to ApiGatewayController. ApiGatewayController calls CustomersServiceClient.getOwner(), which makes an HTTP request to the remote customers-service via WebClient. It also calls VisitsServiceClient.getVisitsForPets() to retrieve visits from the visits-service. ApiGatewayController aggregates the responses and returns a combined OwnerDetails object to the client.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "Describe the flow when a user sends a chat message to the GenAI service.",
+    "ground_truth": "The HTTP request arrives at PetclinicChatClient (a @RestController). PetclinicChatClient registers PetclinicTools (a @Component providing Spring AI tool functions) as a tool provider on the ChatClient; the LLM decides at runtime whether to invoke a PetclinicTools method. PetclinicTools calls AIDataProvider methods (getAllOwners, getVets, etc.). AIDataProvider calls RestClient methods that target only customers-service (via getCustomerServiceUri(), used by getAllOwners/addPetToOwner/addOwnerToPetclinic), or performs a local VectorStore similarity search for vet data (getVets() makes no HTTP call).",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "How is service discovery used in the microservices architecture?",
+    "ground_truth": "The application uses a DiscoveryServerApplication (Eureka server) for service registration and discovery. AIDataProvider injects a DiscoveryClient and calls getCustomerServiceUri() to resolve service URIs at runtime. LoadBalanced WebClient.Builder instances (configured in ApiGatewayApplication and AIBeanConfiguration) use the discovered service names as hostnames, enabling client-side load balancing.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "How does the visits-service expose and persist visit data end-to-end?",
+    "ground_truth": "VisitResource (@RestController) receives HTTP requests at its create() and read() endpoints. create() persists a new Visit via VisitRepository. read() queries visits using VisitRepository.findByPetId() or findByPetIdIn(). VisitsServiceApplication bootstraps the service. The whole service communicates over HTTP with other microservices, particularly the api-gateway which calls it via VisitsServiceClient.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "What happens when the customers-service is unavailable and the API gateway tries to fetch owner details?",
+    "ground_truth": "The customers-service call itself (customersServiceClient.getOwner()) is not wrapped by a circuit breaker in code — only the visits-service call is, via cb.run(..., throwable -> emptyVisitsForPets()). FallbackController is wired separately, only as the Spring Cloud Gateway's routing-level circuit breaker fallback (fallbackUri=forward:/fallback) applied to all proxied HTTP routes (/api/customer/**, /api/vet/**, /api/visit/**, /api/genai/** — the latter also has its own dedicated genaiCircuitBreaker), not for calls made from within ApiGatewayController's own code.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "Describe how the vets-service manages and exposes vet information.",
+    "ground_truth": "VetsServiceApplication bootstraps the service. VetResource (@RestController) injects VetRepository. showResourcesVetList() retrieves all Vet entities from VetRepository and returns them as a REST response. Each Vet entity has a many-to-many relationship with Specialty. CacheConfig is also present in this service to configure Spring caching.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "How is the vector store loaded with vet data in the GenAI service?",
+    "ground_truth": "VectorStoreController is a @Component that calls loadVetDataToVectorStoreOnStartup() on application start. It calls the remote vets-service via HTTP (targeting http://vets-service/) to retrieve vet data, serializes it to JSON using convertListToJsonResource(), and loads it into the VectorStore. AIBeanConfiguration configures the VectorStore bean and a loadBalancedWebClientBuilder for service-to-service calls.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "What is the role of ConfigServerApplication and which annotation identifies it as a config server?",
+    "ground_truth": "ConfigServerApplication is a @SpringBootApplication annotated with @EnableConfigServer. It acts as a Spring Cloud Config Server, providing centralized external configuration to all other microservices. Other services connect to it at startup to fetch their configuration properties.",
+    "category": "single-class"
+  },
+  {
+    "question": "What does SpringBootAdminApplication do and which annotation marks it as an admin server?",
+    "ground_truth": "SpringBootAdminApplication is a @SpringBootApplication annotated with @EnableAdminServer and @EnableDiscoveryClient. It acts as a Spring Boot Admin Server that monitors and manages other registered microservices. It uses service discovery via Eureka to find and connect to the other services.",
+    "category": "single-class"
+  },
+  {
+    "question": "What happens when ResourceNotFoundException is thrown in the customers-service?",
+    "ground_truth": "ResourceNotFoundException extends RuntimeException and is annotated with @ResponseStatus(value = HttpStatus.NOT_FOUND). When thrown within the customers-service (e.g., by OwnerResource or PetResource when an entity is not found), Spring MVC automatically maps it to an HTTP 404 Not Found response without requiring an explicit @ControllerAdvice handler.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "What Spring beans does AIBeanConfiguration create and what are they used for?",
+    "ground_truth": "AIBeanConfiguration is a @Configuration class that creates two beans: a VectorStore (SimpleVectorStore backed by an EmbeddingModel) used by VectorStoreController and AIDataProvider for storing and querying vector embeddings, and a @LoadBalanced WebClient.Builder used for making load-balanced HTTP calls to other microservices.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "Which layers depend on which other layers in the API gateway service?",
+    "ground_truth": "In the API gateway, the controller layer (ApiGatewayController) depends on the component layer (CustomersServiceClient, VisitsServiceClient) via INJECTS relations. The component layer calls remote microservices (customers-service and visits-service) via CALLS_SERVICE relations. ApiGatewayController also injects ReactiveCircuitBreakerFactory via USES_CIRCUIT_BREAKER. The configuration layer (ApiGatewayApplication) creates a WebClient.Builder bean consumed by the service clients. It also defines a RestTemplate bean, but that bean is unused elsewhere in the module.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "How does the vets-service cache vet data?",
+    "ground_truth": "CacheConfig is a @Configuration class annotated with @EnableCaching and @Profile, which enables Spring's caching infrastructure for the vets-service. VetResource.showResourcesVetList() is annotated with @Cacheable, so the list of all vets returned from VetRepository is cached after the first call, avoiding repeated database queries on subsequent requests. This is captured as a CACHING_ENABLED semantic marker on CacheConfig and a CACHE semantic marker on VetResource.showResourcesVetList in the architectural graph.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "What fields does the Owner entity have?",
+    "ground_truth": "The Owner entity has 7 fields: id (Integer), firstName (String), lastName (String), address (String), city (String), telephone (String), and pets (Set<Pet>). It is annotated with @Entity and @Table.",
+    "category": "single-class"
+  },
+  {
+    "question": "What does FallbackController return when invoked?",
+    "ground_truth": "FallbackController is a @RestController with a single fallback() method that returns a ResponseEntity<String> with HTTP 503 SERVICE_UNAVAILABLE status and the body 'Chat is currently unavailable. Please try again later.' It acts as a circuit-breaker fallback endpoint for the GenAI service.",
+    "category": "single-class"
+  },
+  {
+    "question": "Which repositories does PetResource depend on and how does it use them?",
+    "ground_truth": "PetResource injects two repositories: PetRepository and OwnerRepository. PetRepository is used to retrieve all pet types (findPetTypes()), find a pet type by ID (findPetTypeById()), find a pet by ID, and save pet entities. OwnerRepository is used during pet creation to validate and fetch the owner by ID, throwing ResourceNotFoundException if the owner does not exist.",
+    "category": "cross-layer"
+  }
+]

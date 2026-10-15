@@ -1,0 +1,192 @@
+[
+  {
+    "question": "What annotations does UmsAdminController have?",
+    "ground_truth": "UmsAdminController is annotated with @Controller, @Tag (OpenAPI), and @RequestMapping. It uses @ResponseBody on individual methods.",
+    "category": "single-class"
+  },
+  {
+    "question": "What is the role of MallSecurityConfig in the application?",
+    "ground_truth": "MallSecurityConfig is a @Configuration class that configures Spring Security for mall-admin. It creates two beans: a UserDetailsService (UmsAdminServiceImpl) for loading user details and a DynamicSecurityService for dynamic authorization based on resources.",
+    "category": "single-class"
+  },
+  {
+    "question": "What annotations does MyBatisConfig have?",
+    "ground_truth": "MyBatisConfig is annotated with @Configuration, @EnableTransactionManagement (enables declarative transaction management), and @MapperScan (specifies the package to scan for MyBatis mapper interfaces).",
+    "category": "single-class"
+  },
+  {
+    "question": "What is the package of UmsAdminController?",
+    "ground_truth": "UmsAdminController belongs to the com.macro.mall.controller package.",
+    "category": "single-class"
+  },
+  {
+    "question": "What role does OssConfig play and what bean does it create?",
+    "ground_truth": "OssConfig is a @Configuration class responsible for configuring Alibaba Cloud Object Storage Service (OSS). It creates an OSSClient bean used by OssServiceImpl to upload files to OSS.",
+    "category": "single-class"
+  },
+  {
+    "question": "What services does UmsAdminController depend on?",
+    "ground_truth": "UmsAdminController depends on two services: UmsAdminService (for admin user operations like login, register, update) and UmsRoleService (for role management operations).",
+    "category": "single-class"
+  },
+  {
+    "question": "What does GlobalCorsConfig configure?",
+    "ground_truth": "GlobalCorsConfig is a @Configuration class that creates a CorsFilter bean to configure Cross-Origin Resource Sharing (CORS) for the mall-admin backend, allowing frontend applications from different origins to access the API.",
+    "category": "single-class"
+  },
+  {
+    "question": "What annotations does MallAdminApplication have?",
+    "ground_truth": "MallAdminApplication is annotated with @SpringBootApplication, making it the entry point for the Spring Boot application that bootstraps mall-admin.",
+    "category": "single-class"
+  },
+  {
+    "question": "What endpoints does UmsAdminController expose?",
+    "ground_truth": "UmsAdminController exposes endpoints including /register (admin registration), /login (authentication returning a JWT token), /refreshToken, /info (get current user info), /logout, /list (list admins), /{id} (get admin by id), /update/{id}, /updatePassword, /delete/{id}, /updateStatus/{id}, /role/update, and /role/{adminId}.",
+    "category": "single-class"
+  },
+  {
+    "question": "What is the role of SpringDocConfig in mall-admin?",
+    "ground_truth": "SpringDocConfig is a @Configuration class that sets up OpenAPI (Swagger) documentation for mall-admin. It creates an OpenAPI bean defining the API metadata and implements addViewControllers to redirect /swagger-ui/ to /swagger-ui/index.html.",
+    "category": "single-class"
+  },
+  {
+    "question": "How does UmsAdminController access admin data?",
+    "ground_truth": "UmsAdminController injects UmsAdminService and UmsRoleService via field injection (@Autowired). It delegates all admin user operations (register, login, update, delete) to UmsAdminService and role-related operations to UmsRoleService.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "How does PmsProductServiceImpl interact with the persistence layer?",
+    "ground_truth": "PmsProductServiceImpl injects multiple DAOs via field injection: PmsMemberPriceDao, PmsProductLadderDao, PmsProductFullReductionDao, PmsSkuStockDao, PmsProductAttributeValueDao, CmsSubjectProductRelationDao, CmsPrefrenceAreaProductRelationDao, PmsProductDao, and PmsProductVertifyRecordDao. This allows it to persist all aspects of a product including pricing tiers, attribute values, and subject/preference area relations.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "What DAOs does SmsCouponServiceImpl use?",
+    "ground_truth": "SmsCouponServiceImpl uses three DAOs: SmsCouponDao (for direct coupon CRUD), SmsCouponProductRelationDao (for product-coupon associations), and SmsCouponProductCategoryRelationDao (for category-coupon associations). These enable managing coupons together with their product and category relations.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "How does UmsAdminServiceImpl manage role data?",
+    "ground_truth": "UmsAdminServiceImpl uses UmsAdminRoleRelationDao to manage the many-to-many relationship between admins and roles. It also uses UmsAdminCacheService for caching admin data to improve performance.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "Which controllers belong to the controller layer in mall-admin?",
+    "ground_truth": "All 31 controllers in the com.macro.mall.controller package belong to the controller layer. They are annotated with @Controller and @RequestMapping, including UmsAdminController, PmsProductController, OmsOrderController, SmsCouponController, and others covering all business domains (Ums=user management, Pms=product management, Oms=order management, Sms=marketing).",
+    "category": "cross-layer"
+  },
+  {
+    "question": "How does MallSecurityConfig wire security components?",
+    "ground_truth": "MallSecurityConfig is a @Configuration class that creates a UserDetailsService bean backed by UmsAdminServiceImpl (for authenticating admin users against the database) and a DynamicSecurityService bean for dynamic resource-based authorization. These beans are consumed by the security filter chain for JWT authentication.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "What does OmsOrderServiceImpl use for persistence?",
+    "ground_truth": "OmsOrderServiceImpl injects OmsOrderDao (for order queries and updates) and OmsOrderOperateHistoryDao (for recording order operation history). The @Transactional annotation on several methods (delivery, close, updateReceiverInfo, updateMoneyInfo, updateNote) ensures multi-DAO operations are atomic.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "What service interfaces do mall-admin service implementations implement?",
+    "ground_truth": "Each service implementation in mall-admin implements its corresponding service interface via IMPLEMENTS relations. For example, UmsAdminServiceImpl implements UmsAdminService, PmsProductServiceImpl implements PmsProductService, OmsOrderServiceImpl implements OmsOrderService. There are 31 such implementation-interface pairs following the standard Spring service interface pattern.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "How is UmsRoleServiceImpl structured?",
+    "ground_truth": "UmsRoleServiceImpl is a @Service implementation of UmsRoleService. It uses UmsRoleDao for role CRUD operations and UmsAdminCacheService for cache invalidation when role assignments change.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "What is the dependency chain from PmsProductController to data?",
+    "ground_truth": "PmsProductController (CONTROLLER) uses PmsProductService (SERVICE interface) which is implemented by PmsProductServiceImpl. PmsProductServiceImpl uses multiple DAOs (PmsProductDao, PmsMemberPriceDao, PmsProductLadderDao, and others) for persistence. This forms a strict three-tier architecture: Controller → Service interface → Service implementation → DAO.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "How does transaction management work in mall-admin?",
+    "ground_truth": "MyBatisConfig is annotated with @EnableTransactionManagement, enabling Spring's declarative transaction management for MyBatis. Service methods annotated with @Transactional (such as PmsProductService.create, SmsCouponService.create, OmsOrderService.delivery, OmsOrderService.close, and others) are wrapped in transactions to ensure data consistency across multiple DAO calls.",
+    "category": "jpa"
+  },
+  {
+    "question": "What is the role of PmsMemberPriceDao?",
+    "ground_truth": "PmsMemberPriceDao is a custom MyBatis DAO (Repository) in the com.macro.mall.dao package. It provides an insertList() method for batch-inserting member price records associated with products. It is used by PmsProductServiceImpl during product creation and update operations.",
+    "category": "jpa"
+  },
+  {
+    "question": "How does SmsCouponServiceImpl persist coupon data?",
+    "ground_truth": "SmsCouponServiceImpl persists the coupon record itself via SmsCouponMapper (auto-generated Insert/Update/DeleteByPrimaryKey). SmsCouponDao is used only for reads (getItem). SmsCouponProductRelationDao and SmsCouponProductCategoryRelationDao are used conditionally and mutually exclusively, based on couponParam.getUseType() — never both in the same call. The create, delete, and update methods are marked @Transactional.",
+    "category": "jpa"
+  },
+  {
+    "question": "What service methods in mall-admin are marked as transactional?",
+    "ground_truth": "Several service methods are marked with @Transactional (HAS_SEMANTIC → TRANSACTION_BOUNDARY): PmsProductService.create, update, and updateVerifyStatus, SmsCouponService.create, delete, and update, OmsOrderService.delivery, close, updateReceiverInfo, updateMoneyInfo, and updateNote, UmsAdminService.updateRole, UmsRoleService.allocMenu and allocResource, PmsProductCategoryService.create and update, PmsProductAttributeService.create and delete, PmsBrandService.updateBrand, SmsHomeRecommendProductService.create, SmsFlashPromotionProductRelationService.create, SmsHomeBrandService.create, SmsHomeRecommendSubjectService.create, and SmsHomeNewProductService.create.",
+    "category": "jpa"
+  },
+  {
+    "question": "What does PmsProductDao provide?",
+    "ground_truth": "PmsProductDao is a custom MyBatis DAO in the repository layer. It provides getUpdateInfo() for fetching a product's full details needed for update operations. It is used by PmsProductServiceImpl alongside auto-generated MyBatis mappers for complex queries that go beyond standard CRUD.",
+    "category": "jpa"
+  },
+  {
+    "question": "How are MyBatis mappers integrated in mall-admin?",
+    "ground_truth": "MyBatisConfig is annotated with @MapperScan to configure the package containing MyBatis mapper interfaces for Spring to scan and register. @EnableTransactionManagement enables transaction support for multi-mapper operations. The custom DAOs in the dao package (like PmsProductDao, SmsCouponDao, OmsOrderDao) extend this with complex queries beyond what the MyBatis Generator produces.",
+    "category": "jpa"
+  },
+  {
+    "question": "What custom DAOs does PmsProductServiceImpl use and why?",
+    "ground_truth": "PmsProductServiceImpl uses 9 custom DAOs: PmsMemberPriceDao (member pricing tiers), PmsProductLadderDao (quantity-based ladder pricing), PmsProductFullReductionDao (full-reduction promotions), PmsSkuStockDao (SKU inventory), PmsProductAttributeValueDao (attribute values), CmsSubjectProductRelationDao (content subject relations), CmsPrefrenceAreaProductRelationDao (preference area relations), PmsProductDao (complex product queries), and PmsProductVertifyRecordDao (verification history). These are needed because a product in mall-admin is a complex aggregate with many associated entities.",
+    "category": "jpa"
+  },
+  {
+    "question": "What is the role of UmsAdminRoleRelationDao?",
+    "ground_truth": "UmsAdminRoleRelationDao is a Repository used by UmsAdminServiceImpl to manage the many-to-many relationship between admin users and roles. It handles querying and updating which roles are assigned to which admin accounts.",
+    "category": "jpa"
+  },
+  {
+    "question": "Trace the call flow when an admin user logs in via the API.",
+    "ground_truth": "An HTTP request hits UmsAdminController (CONTROLLER layer, @RequestMapping /admin). UmsAdminController calls UmsAdminService.login() which is implemented by UmsAdminServiceImpl (@Service). UmsAdminServiceImpl.loadUserByUsername() loads the admin's resource/permission list (not roles) via getResourceList() to build the Spring Security Authentication object, validates the password, then generates and returns a JWT token via JwtTokenUtil. The JWT itself contains only username and a created timestamp as claims — no roles or resources are embedded in the token.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "Describe the full flow when a product is created in mall-admin.",
+    "ground_truth": "A POST request arrives at PmsProductController (CONTROLLER). It delegates to PmsProductService which is implemented by PmsProductServiceImpl (@Service, @Transactional on create). PmsProductServiceImpl inserts the product itself via PmsProductMapper, then orchestrates inserts across 7 of its 9 injected DAOs: PmsMemberPriceDao, PmsProductLadderDao, PmsProductFullReductionDao, PmsSkuStockDao, PmsProductAttributeValueDao, CmsSubjectProductRelationDao, and CmsPrefrenceAreaProductRelationDao. PmsProductDao and PmsProductVertifyRecordDao are used elsewhere in the class, not in create(). The entire operation is wrapped in a transaction via @Transactional.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "How is CORS configured and applied in mall-admin?",
+    "ground_truth": "GlobalCorsConfig (@Configuration) creates a CorsFilter bean that configures allowed origins, headers, and methods for cross-origin requests. This filter is registered with Spring's filter chain and intercepts all HTTP requests before they reach the controllers, adding the appropriate CORS headers to allow the frontend application to call the mall-admin API.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "How does order delivery work end-to-end?",
+    "ground_truth": "A delivery request hits OmsOrderController (CONTROLLER). It calls OmsOrderService.delivery() implemented by OmsOrderServiceImpl. The delivery() method is @Transactional and uses OmsOrderDao to update order status to delivered and OmsOrderOperateHistoryDao to record the delivery operation in history. Both DAO operations are committed together.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "How does coupon creation flow through the layers?",
+    "ground_truth": "A POST request to create a coupon arrives at SmsCouponController (CONTROLLER layer). It delegates to SmsCouponService.create() implemented by SmsCouponServiceImpl (@Service). The create() method is @Transactional and persists the coupon itself via SmsCouponMapper. It then uses either SmsCouponProductRelationDao for product associations or SmsCouponProductCategoryRelationDao for category associations, depending on couponParam.getUseType() — never both in the same call.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "How does role allocation work for an admin user?",
+    "ground_truth": "UmsAdminController.updateRole() is called with an admin ID and list of role IDs. It delegates to UmsAdminService.updateRole() which is @Transactional. UmsAdminServiceImpl clears existing role assignments via UmsAdminRoleRelationMapper.deleteByExample() and inserts the new set via UmsAdminRoleRelationDao.insertList(). UmsAdminCacheService is called to invalidate the cached admin data after the role change.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "What happens when a request is made to a secured endpoint in mall-admin?",
+    "ground_truth": "Incoming requests pass through the security filter chain configured by Spring Security. The JWT filter (JwtAuthenticationTokenFilter from mall-security) intercepts the request, extracts the JWT token, and uses JwtTokenUtil to validate it. If valid, the user details are loaded via UserDetailsService (backed by UmsAdminServiceImpl). DynamicAuthorizationManager then checks if the user has permission for the requested resource by consulting DynamicSecurityMetadataSource, which loads resource-role mappings. If authorized, the request proceeds to the controller.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "Which layers exist in mall-admin and how are they connected?",
+    "ground_truth": "mall-admin follows a strict three-tier architecture: CONTROLLER_LAYER (31 controllers annotated @Controller), SERVICE_LAYER (64 service classes — 33 interfaces + 31 @Service implementations), and REPOSITORY_LAYER (22 custom DAOs). Controllers use services (USES relations), service implementations use DAOs (USES relations), and service implementations implement service interfaces (IMPLEMENTS relations). CONFIGURATION classes (9 total) provide cross-cutting beans (security, CORS, transaction management, OSS).",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "What is the role of WebLogAspect in mall-admin?",
+    "ground_truth": "WebLogAspect is a @Component annotated with @Aspect and @Order that implements AOP-based HTTP request logging for mall-admin. It intercepts all controller method calls via @Around advice (doAround) and supplements them with @Before (doBefore) and @AfterReturning (doAfterReturning) advice. It logs each incoming request's URL, HTTP method, IP address, parameters, and the corresponding response, providing cross-cutting observability without modifying any controller code.",
+    "category": "single-class"
+  },
+  {
+    "question": "How does mall-admin cache admin user and permission data?",
+    "ground_truth": "mall-admin uses a dedicated Redis caching layer. RedisConfig (@Configuration, @EnableCaching) enables Spring's caching infrastructure. UmsAdminCacheService (interface) and its implementation UmsAdminCacheServiceImpl (@Service) provide explicit cache operations: getAdmin/setAdmin for caching admin user objects and getResourceList/setResourceList for caching permission resource lists keyed by admin ID. UmsAdminServiceImpl and UmsRoleServiceImpl call UmsAdminCacheService to invalidate cache entries on updates. RedisCacheAspect (@Aspect, @Component) provides an additional AOP-based caching mechanism via @Around advice.",
+    "category": "cross-layer"
+  }
+]

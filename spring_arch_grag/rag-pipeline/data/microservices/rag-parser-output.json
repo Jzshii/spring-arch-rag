@@ -1,0 +1,3027 @@
+{
+  "classes" : [ {
+    "packageName" : "org.springframework.samples.petclinic.config",
+    "className" : "ConfigServerApplication",
+    "role" : "CONFIGURATION",
+    "annotations" : [ "EnableConfigServer", "SpringBootApplication" ],
+    "annotationDetails" : [ {
+      "name" : "EnableConfigServer",
+      "attributes" : { }
+    }, {
+      "name" : "SpringBootApplication",
+      "attributes" : { }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ ],
+    "methods" : [ {
+      "methodName" : "main",
+      "signature" : "public static void main(String[] args)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "args",
+        "parameterType" : "String[]",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    SpringApplication.run(ConfigServerApplication.class, args);\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.discovery",
+    "className" : "DiscoveryServerApplication",
+    "role" : "CONFIGURATION",
+    "annotations" : [ "SpringBootApplication", "EnableEurekaServer" ],
+    "annotationDetails" : [ {
+      "name" : "SpringBootApplication",
+      "attributes" : { }
+    }, {
+      "name" : "EnableEurekaServer",
+      "attributes" : { }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ ],
+    "methods" : [ {
+      "methodName" : "main",
+      "signature" : "public static void main(String[] args)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "args",
+        "parameterType" : "String[]",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    SpringApplication.run(DiscoveryServerApplication.class, args);\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.genai",
+    "className" : "PetclinicTools",
+    "role" : "COMPONENT",
+    "annotations" : [ "Component" ],
+    "annotationDetails" : [ {
+      "name" : "Component",
+      "attributes" : { }
+    } ],
+    "dependencies" : [ "AIDataProvider", "Vet" ],
+    "fields" : [ {
+      "fieldName" : "LOG",
+      "fieldType" : "Logger",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "petclinicAiProvider",
+      "fieldType" : "AIDataProvider",
+      "annotations" : [ ]
+    } ],
+    "methods" : [ {
+      "methodName" : "listOwners",
+      "signature" : "public List<OwnerDetails> listOwners()",
+      "returnType" : "List<OwnerDetails>",
+      "annotations" : [ "Tool" ],
+      "annotationDetails" : [ {
+        "name" : "Tool",
+        "attributes" : {
+          "description" : [ "List the owners that the pet clinic has" ]
+        }
+      } ],
+      "parameters" : [ ],
+      "calls" : [ "AIDataProvider.getAllOwners" ],
+      "methodBody" : "{\n    LOG.info(\"listOwners()\");\n    return petclinicAiProvider.getAllOwners();\n}"
+    }, {
+      "methodName" : "addOwnerToPetclinic",
+      "signature" : "public OwnerDetails addOwnerToPetclinic(OwnerRequest ownerRequest)",
+      "returnType" : "OwnerDetails",
+      "annotations" : [ "Tool" ],
+      "annotationDetails" : [ {
+        "name" : "Tool",
+        "attributes" : {
+          "description" : [ "\"\"\"\n    Add a new pet owner to the pet clinic. The Owner must include a first name and a last name\n    as two separate words,plus an address and a 10-digit phone number\n    \"\"\"" ]
+        }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "ownerRequest",
+        "parameterType" : "OwnerRequest",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ "AIDataProvider.addOwnerToPetclinic" ],
+      "methodBody" : "{\n    LOG.info(\"addOwnerToPetclinic() ownerRequest={}\", ownerRequest);\n    return petclinicAiProvider.addOwnerToPetclinic(ownerRequest);\n}"
+    }, {
+      "methodName" : "listVets",
+      "signature" : "public List<String> listVets(@ToolParam(required = false) Vet vetRequest)",
+      "returnType" : "List<String>",
+      "annotations" : [ "Tool" ],
+      "annotationDetails" : [ {
+        "name" : "Tool",
+        "attributes" : {
+          "description" : [ "List the veterinarians that the pet clinic has" ]
+        }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "vetRequest",
+        "parameterType" : "Vet",
+        "annotations" : [ "ToolParam" ]
+      } ],
+      "calls" : [ "AIDataProvider.getVets" ],
+      "methodBody" : "{\n    LOG.info(\"listVets() vetRequest={}\", vetRequest);\n    try {\n        return petclinicAiProvider.getVets(vetRequest);\n    } catch (JacksonException e) {\n        LOG.error(\"Error processing JSON in the listVets function\", e);\n        return List.of();\n    }\n}"
+    }, {
+      "methodName" : "addPetToOwner",
+      "signature" : "public PetDetails addPetToOwner(@ToolParam(description = \"Pet's owner identifier\") int ownerId, PetRequest petRequest)",
+      "returnType" : "PetDetails",
+      "annotations" : [ "Tool" ],
+      "annotationDetails" : [ {
+        "name" : "Tool",
+        "attributes" : {
+          "description" : [ "\"\"\"\n    Add a pet with the specified petTypeId, to an owner identified by the ownerId.\n    The allowed Pet types IDs are only: 1 = cat, 2 = dog, 3 = lizard, 4 = snake, 5 = bird,\n    6 - hamster\n    \"\"\"" ]
+        }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "ownerId",
+        "parameterType" : "int",
+        "annotations" : [ "ToolParam" ]
+      }, {
+        "parameterName" : "petRequest",
+        "parameterType" : "PetRequest",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ "AIDataProvider.addPetToOwner" ],
+      "methodBody" : "{\n    LOG.info(\"addPetToOwner() ownerId={} petRequest={}\", ownerId, petRequest);\n    return petclinicAiProvider.addPetToOwner(ownerId, petRequest);\n}"
+    } ],
+    "constructors" : [ {
+      "signature" : " PetclinicTools(AIDataProvider petclinicAiProvider)",
+      "annotations" : [ ],
+      "parameters" : [ {
+        "parameterName" : "petclinicAiProvider",
+        "parameterType" : "AIDataProvider",
+        "annotations" : [ ]
+      } ]
+    } ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.genai",
+    "className" : "AIBeanConfiguration",
+    "role" : "CONFIGURATION",
+    "annotations" : [ "Configuration" ],
+    "annotationDetails" : [ {
+      "name" : "Configuration",
+      "attributes" : { }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ ],
+    "methods" : [ {
+      "methodName" : "vectorStore",
+      "signature" : " VectorStore vectorStore(EmbeddingModel embeddingModel)",
+      "returnType" : "VectorStore",
+      "annotations" : [ "Bean" ],
+      "annotationDetails" : [ {
+        "name" : "Bean",
+        "attributes" : { }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "embeddingModel",
+        "parameterType" : "EmbeddingModel",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return SimpleVectorStore.builder(embeddingModel).build();\n}"
+    }, {
+      "methodName" : "loadBalancedWebClientBuilder",
+      "signature" : "public WebClient.Builder loadBalancedWebClientBuilder()",
+      "returnType" : "WebClient.Builder",
+      "annotations" : [ "Bean", "LoadBalanced" ],
+      "annotationDetails" : [ {
+        "name" : "Bean",
+        "attributes" : { }
+      }, {
+        "name" : "LoadBalanced",
+        "attributes" : { }
+      } ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return WebClient.builder();\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.genai",
+    "className" : "AIDataProvider",
+    "role" : "SERVICE",
+    "annotations" : [ "Service" ],
+    "annotationDetails" : [ {
+      "name" : "Service",
+      "attributes" : { }
+    } ],
+    "dependencies" : [ "Vet" ],
+    "fields" : [ {
+      "fieldName" : "vectorStore",
+      "fieldType" : "VectorStore",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "restClient",
+      "fieldType" : "RestClient",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "discoveryClient",
+      "fieldType" : "DiscoveryClient",
+      "annotations" : [ ]
+    } ],
+    "methods" : [ {
+      "methodName" : "getAllOwners",
+      "signature" : "public List<OwnerDetails> getAllOwners()",
+      "returnType" : "List<OwnerDetails>",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return restClient.get().uri(getCustomerServiceUri() + \"/owners\").retrieve().body(new ParameterizedTypeReference<>() {\n    });\n}"
+    }, {
+      "methodName" : "getVets",
+      "signature" : "public List<String> getVets(Vet vetRequest) throws JacksonException",
+      "returnType" : "List<String>",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "vetRequest",
+        "parameterType" : "Vet",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    ObjectMapper objectMapper = new ObjectMapper();\n    String vetAsJson = objectMapper.writeValueAsString(vetRequest);\n    int topK = 20;\n    if (vetRequest == null) {\n        // Provide a limit of 50 results when zero parameters are sent\n        topK = 50;\n    }\n    SearchRequest sr = SearchRequest.builder().query(vetAsJson).topK(topK).build();\n    List<Document> topMatches = this.vectorStore.similaritySearch(sr);\n    return topMatches.stream().map(Document::getFormattedContent).toList();\n}"
+    }, {
+      "methodName" : "addPetToOwner",
+      "signature" : "public PetDetails addPetToOwner(int ownerId, PetRequest petRequest)",
+      "returnType" : "PetDetails",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "ownerId",
+        "parameterType" : "int",
+        "annotations" : [ ]
+      }, {
+        "parameterName" : "petRequest",
+        "parameterType" : "PetRequest",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return restClient.post().uri(getCustomerServiceUri() + \"/owners/\" + ownerId + \"/pets\").body(petRequest).retrieve().body(PetDetails.class);\n}"
+    }, {
+      "methodName" : "addOwnerToPetclinic",
+      "signature" : "public OwnerDetails addOwnerToPetclinic(OwnerRequest ownerRequest)",
+      "returnType" : "OwnerDetails",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "ownerRequest",
+        "parameterType" : "OwnerRequest",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return restClient.post().uri(getCustomerServiceUri() + \"/owners\").body(ownerRequest).retrieve().body(OwnerDetails.class);\n}"
+    }, {
+      "methodName" : "getCustomerServiceUri",
+      "signature" : "private URI getCustomerServiceUri()",
+      "returnType" : "URI",
+      "annotations" : [ "NotNull" ],
+      "annotationDetails" : [ {
+        "name" : "NotNull",
+        "attributes" : { }
+      } ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return discoveryClient.getInstances(\"customers-service\").get(0).getUri();\n}"
+    } ],
+    "constructors" : [ {
+      "signature" : "public AIDataProvider(VectorStore vectorStore, DiscoveryClient discoveryClient)",
+      "annotations" : [ ],
+      "parameters" : [ {
+        "parameterName" : "vectorStore",
+        "parameterType" : "VectorStore",
+        "annotations" : [ ]
+      }, {
+        "parameterName" : "discoveryClient",
+        "parameterType" : "DiscoveryClient",
+        "annotations" : [ ]
+      } ]
+    } ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ {
+      "serviceName" : "customers-service",
+      "httpMethod" : "GET",
+      "path" : "/owners"
+    }, {
+      "serviceName" : "customers-service",
+      "httpMethod" : "POST",
+      "path" : "/owners/{}/pets"
+    }, {
+      "serviceName" : "customers-service",
+      "httpMethod" : "POST",
+      "path" : "/owners"
+    } ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.genai",
+    "className" : "VectorStoreController",
+    "role" : "EVENT_LISTENER",
+    "annotations" : [ "Component" ],
+    "annotationDetails" : [ {
+      "name" : "Component",
+      "attributes" : { }
+    } ],
+    "dependencies" : [ "Vet" ],
+    "fields" : [ {
+      "fieldName" : "logger",
+      "fieldType" : "Logger",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "vectorStore",
+      "fieldType" : "VectorStore",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "webClient",
+      "fieldType" : "WebClient",
+      "annotations" : [ ]
+    } ],
+    "methods" : [ {
+      "methodName" : "loadVetDataToVectorStoreOnStartup",
+      "signature" : "public void loadVetDataToVectorStoreOnStartup(ApplicationStartedEvent event) throws IOException",
+      "returnType" : "void",
+      "annotations" : [ "EventListener" ],
+      "annotationDetails" : [ {
+        "name" : "EventListener",
+        "attributes" : { }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "event",
+        "parameterType" : "ApplicationStartedEvent",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    Resource resource = new ClassPathResource(\"vectorstore.json\");\n    // Check if file exists\n    if (resource.exists()) {\n        // In order to save on AI credits, use a pre-embedded database that was saved\n        // to\n        // disk based on the current data in the h2 data.sql file\n        File file = resource.getFile();\n        ((SimpleVectorStore) this.vectorStore).load(file);\n        logger.info(\"vector store loaded from existing vectorstore.json file in the classpath\");\n        return;\n    }\n    // If vectorstore.json is deleted, the data will be loaded on startup every time.\n    // Warning - this can be costly in terms of credits used with the AI provider.\n    // Fetches all Vet entites and creates a document per vet\n    String vetsHostname = \"http://vets-service/\";\n    List<Vet> vets = webClient.get().uri(vetsHostname + \"vets\").retrieve().bodyToMono(new ParameterizedTypeReference<List<Vet>>() {\n    }).block();\n    Resource vetsAsJson = convertListToJsonResource(vets);\n    DocumentReader reader = new JsonReader(vetsAsJson);\n    List<Document> documents = reader.get();\n    // add the documents to the vector store\n    this.vectorStore.add(documents);\n    if (vectorStore instanceof SimpleVectorStore store) {\n        // java:S5443 Sonar rule: Using publicly writable directories is security-sensitive\n        FileAttribute<Set<PosixFilePermission>> attr = PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString(\"rwx------\"));\n        File file = Files.createTempFile(\"vectorstore\", \".json\", attr).toFile();\n        store.save(file);\n        logger.info(\"vector store contents written to {}\", file.getAbsolutePath());\n    }\n    logger.info(\"vector store loaded with {} documents\", documents.size());\n}"
+    }, {
+      "methodName" : "convertListToJsonResource",
+      "signature" : "public Resource convertListToJsonResource(List<Vet> vets)",
+      "returnType" : "Resource",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "vets",
+        "parameterType" : "List<Vet>",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    ObjectMapper objectMapper = new ObjectMapper();\n    try {\n        // Convert List<Vet> to JSON string\n        String json = objectMapper.writeValueAsString(vets);\n        // Convert JSON string to byte array\n        byte[] jsonBytes = json.getBytes();\n        // Create a ByteArrayResource from the byte array\n        return new ByteArrayResource(jsonBytes);\n    } catch (JacksonException e) {\n        logger.error(\"Error processing JSON in the convertListToJsonResource function\", e);\n        return null;\n    }\n}"
+    } ],
+    "constructors" : [ {
+      "signature" : "public VectorStoreController(VectorStore vectorStore, WebClient.Builder webClientBuilder)",
+      "annotations" : [ ],
+      "parameters" : [ {
+        "parameterName" : "vectorStore",
+        "parameterType" : "VectorStore",
+        "annotations" : [ ]
+      }, {
+        "parameterName" : "webClientBuilder",
+        "parameterType" : "WebClient.Builder",
+        "annotations" : [ ]
+      } ]
+    } ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ {
+      "serviceName" : "vets-service",
+      "httpMethod" : "GET",
+      "path" : "vets"
+    } ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.genai",
+    "className" : "GenAIServiceApplication",
+    "role" : "CONFIGURATION",
+    "annotations" : [ "EnableDiscoveryClient", "SpringBootApplication" ],
+    "annotationDetails" : [ {
+      "name" : "EnableDiscoveryClient",
+      "attributes" : { }
+    }, {
+      "name" : "SpringBootApplication",
+      "attributes" : { }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ ],
+    "methods" : [ {
+      "methodName" : "main",
+      "signature" : "public static void main(String[] args)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "args",
+        "parameterType" : "String[]",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    SpringApplication.run(GenAIServiceApplication.class, args);\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.genai",
+    "className" : "PetclinicChatClient",
+    "role" : "CONTROLLER",
+    "annotations" : [ "RestController", "RequestMapping" ],
+    "annotationDetails" : [ {
+      "name" : "RestController",
+      "attributes" : { }
+    }, {
+      "name" : "RequestMapping",
+      "attributes" : {
+        "value" : [ "/" ]
+      }
+    } ],
+    "dependencies" : [ "PetclinicTools" ],
+    "fields" : [ {
+      "fieldName" : "LOG",
+      "fieldType" : "Logger",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "chatClient",
+      "fieldType" : "ChatClient",
+      "annotations" : [ ]
+    } ],
+    "methods" : [ {
+      "methodName" : "exchange",
+      "signature" : "public String exchange(@RequestBody String query)",
+      "returnType" : "String",
+      "annotations" : [ "PostMapping" ],
+      "annotationDetails" : [ {
+        "name" : "PostMapping",
+        "attributes" : {
+          "value" : [ "/chatclient" ]
+        }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "query",
+        "parameterType" : "String",
+        "annotations" : [ "RequestBody" ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    try {\n        //All chatbot messages go through this endpoint\n        //and are passed to the LLM\n        return this.chatClient.prompt().user(query).call().content();\n    } catch (Exception exception) {\n        LOG.error(\"Error processing chat message\", exception);\n        return \"Chat is currently unavailable. Please try again later.\";\n    }\n}"
+    } ],
+    "constructors" : [ {
+      "signature" : "public PetclinicChatClient(ChatClient.Builder builder, ChatMemory chatMemory, PetclinicTools petclinicTools)",
+      "annotations" : [ ],
+      "parameters" : [ {
+        "parameterName" : "builder",
+        "parameterType" : "ChatClient.Builder",
+        "annotations" : [ ]
+      }, {
+        "parameterName" : "chatMemory",
+        "parameterType" : "ChatMemory",
+        "annotations" : [ ]
+      }, {
+        "parameterName" : "petclinicTools",
+        "parameterType" : "PetclinicTools",
+        "annotations" : [ ]
+      } ]
+    } ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.admin",
+    "className" : "SpringBootAdminApplication",
+    "role" : "CONFIGURATION",
+    "annotations" : [ "SpringBootApplication", "EnableAdminServer", "EnableDiscoveryClient" ],
+    "annotationDetails" : [ {
+      "name" : "SpringBootApplication",
+      "attributes" : { }
+    }, {
+      "name" : "EnableAdminServer",
+      "attributes" : { }
+    }, {
+      "name" : "EnableDiscoveryClient",
+      "attributes" : { }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ ],
+    "methods" : [ {
+      "methodName" : "main",
+      "signature" : "public static void main(String[] args)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "args",
+        "parameterType" : "String[]",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    SpringApplication.run(SpringBootAdminApplication.class, args);\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.vets.web",
+    "className" : "VetResource",
+    "role" : "CONTROLLER",
+    "annotations" : [ "RequestMapping", "RestController" ],
+    "annotationDetails" : [ {
+      "name" : "RequestMapping",
+      "attributes" : {
+        "value" : [ "/vets" ]
+      }
+    }, {
+      "name" : "RestController",
+      "attributes" : { }
+    } ],
+    "dependencies" : [ "VetRepository", "Vet" ],
+    "fields" : [ {
+      "fieldName" : "vetRepository",
+      "fieldType" : "VetRepository",
+      "annotations" : [ ]
+    } ],
+    "methods" : [ {
+      "methodName" : "showResourcesVetList",
+      "signature" : "public List<Vet> showResourcesVetList()",
+      "returnType" : "List<Vet>",
+      "annotations" : [ "GetMapping", "Cacheable" ],
+      "annotationDetails" : [ {
+        "name" : "GetMapping",
+        "attributes" : { }
+      }, {
+        "name" : "Cacheable",
+        "attributes" : {
+          "value" : [ "vets" ]
+        }
+      } ],
+      "parameters" : [ ],
+      "calls" : [ "VetRepository.findAll" ],
+      "methodBody" : "{\n    return vetRepository.findAll();\n}"
+    } ],
+    "constructors" : [ {
+      "signature" : " VetResource(VetRepository vetRepository)",
+      "annotations" : [ ],
+      "parameters" : [ {
+        "parameterName" : "vetRepository",
+        "parameterType" : "VetRepository",
+        "annotations" : [ ]
+      } ]
+    } ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.vets",
+    "className" : "VetsServiceApplication",
+    "role" : "CONFIGURATION",
+    "annotations" : [ "EnableDiscoveryClient", "SpringBootApplication", "EnableConfigurationProperties" ],
+    "annotationDetails" : [ {
+      "name" : "EnableDiscoveryClient",
+      "attributes" : { }
+    }, {
+      "name" : "SpringBootApplication",
+      "attributes" : { }
+    }, {
+      "name" : "EnableConfigurationProperties",
+      "attributes" : {
+        "value" : [ "VetsProperties" ]
+      }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ ],
+    "methods" : [ {
+      "methodName" : "main",
+      "signature" : "public static void main(String[] args)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "args",
+        "parameterType" : "String[]",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    SpringApplication.run(VetsServiceApplication.class, args);\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.vets.system",
+    "className" : "CacheConfig",
+    "role" : "CONFIGURATION",
+    "annotations" : [ "Configuration", "EnableCaching", "Profile" ],
+    "annotationDetails" : [ {
+      "name" : "Configuration",
+      "attributes" : { }
+    }, {
+      "name" : "EnableCaching",
+      "attributes" : { }
+    }, {
+      "name" : "Profile",
+      "attributes" : {
+        "value" : [ "production" ]
+      }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ ],
+    "methods" : [ ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.vets.model",
+    "className" : "Vet",
+    "role" : "ENTITY",
+    "annotations" : [ "Entity", "Table" ],
+    "annotationDetails" : [ {
+      "name" : "Entity",
+      "attributes" : { }
+    }, {
+      "name" : "Table",
+      "attributes" : {
+        "name" : [ "vets" ]
+      }
+    } ],
+    "dependencies" : [ "Specialty" ],
+    "fields" : [ {
+      "fieldName" : "id",
+      "fieldType" : "Integer",
+      "annotations" : [ "Id", "GeneratedValue" ]
+    }, {
+      "fieldName" : "firstName",
+      "fieldType" : "String",
+      "annotations" : [ "Column", "NotBlank" ]
+    }, {
+      "fieldName" : "lastName",
+      "fieldType" : "String",
+      "annotations" : [ "Column", "NotBlank" ]
+    }, {
+      "fieldName" : "specialties",
+      "fieldType" : "Set<Specialty>",
+      "annotations" : [ "ManyToMany", "JoinTable" ]
+    } ],
+    "methods" : [ {
+      "methodName" : "getSpecialtiesInternal",
+      "signature" : "protected Set<Specialty> getSpecialtiesInternal()",
+      "returnType" : "Set<Specialty>",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    if (this.specialties == null) {\n        this.specialties = new HashSet<>();\n    }\n    return this.specialties;\n}"
+    }, {
+      "methodName" : "getSpecialties",
+      "signature" : "public List<Specialty> getSpecialties()",
+      "returnType" : "List<Specialty>",
+      "annotations" : [ "XmlElement" ],
+      "annotationDetails" : [ {
+        "name" : "XmlElement",
+        "attributes" : { }
+      } ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    List<Specialty> sortedSpecs = new ArrayList<>(getSpecialtiesInternal());\n    PropertyComparator.sort(sortedSpecs, new MutableSortDefinition(\"name\", true, true));\n    return Collections.unmodifiableList(sortedSpecs);\n}"
+    }, {
+      "methodName" : "getNrOfSpecialties",
+      "signature" : "public int getNrOfSpecialties()",
+      "returnType" : "int",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return getSpecialtiesInternal().size();\n}"
+    }, {
+      "methodName" : "addSpecialty",
+      "signature" : "public void addSpecialty(Specialty specialty)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "specialty",
+        "parameterType" : "Specialty",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    getSpecialtiesInternal().add(specialty);\n}"
+    }, {
+      "methodName" : "getId",
+      "signature" : "public Integer getId()",
+      "returnType" : "Integer",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.id;\n}"
+    }, {
+      "methodName" : "getFirstName",
+      "signature" : "public String getFirstName()",
+      "returnType" : "String",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.firstName;\n}"
+    }, {
+      "methodName" : "getLastName",
+      "signature" : "public String getLastName()",
+      "returnType" : "String",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.lastName;\n}"
+    }, {
+      "methodName" : "setId",
+      "signature" : "public void setId(Integer id)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "id",
+        "parameterType" : "Integer",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.id = id;\n}"
+    }, {
+      "methodName" : "setFirstName",
+      "signature" : "public void setFirstName(String firstName)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "firstName",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.firstName = firstName;\n}"
+    }, {
+      "methodName" : "setLastName",
+      "signature" : "public void setLastName(String lastName)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "lastName",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.lastName = lastName;\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.vets.model",
+    "className" : "Specialty",
+    "role" : "ENTITY",
+    "annotations" : [ "Entity", "Table" ],
+    "annotationDetails" : [ {
+      "name" : "Entity",
+      "attributes" : { }
+    }, {
+      "name" : "Table",
+      "attributes" : {
+        "name" : [ "specialties" ]
+      }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ {
+      "fieldName" : "id",
+      "fieldType" : "Integer",
+      "annotations" : [ "Id", "GeneratedValue" ]
+    }, {
+      "fieldName" : "name",
+      "fieldType" : "String",
+      "annotations" : [ "Column" ]
+    } ],
+    "methods" : [ {
+      "methodName" : "getId",
+      "signature" : "public Integer getId()",
+      "returnType" : "Integer",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.id;\n}"
+    }, {
+      "methodName" : "getName",
+      "signature" : "public String getName()",
+      "returnType" : "String",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.name;\n}"
+    }, {
+      "methodName" : "setName",
+      "signature" : "public void setName(String name)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "name",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.name = name;\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.vets.model",
+    "className" : "VetRepository",
+    "role" : "REPOSITORY",
+    "annotations" : [ ],
+    "annotationDetails" : [ ],
+    "dependencies" : [ "Vet" ],
+    "fields" : [ ],
+    "methods" : [ ],
+    "constructors" : [ ],
+    "extendedTypes" : [ "JpaRepository<Vet,Integer>" ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.api.dto",
+    "className" : "PetDetailsBuilder",
+    "role" : "UNKNOWN",
+    "annotations" : [ ],
+    "annotationDetails" : [ ],
+    "dependencies" : [ "PetType", "PetDetailsBuilder" ],
+    "fields" : [ {
+      "fieldName" : "id",
+      "fieldType" : "int",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "name",
+      "fieldType" : "String",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "birthDate",
+      "fieldType" : "String",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "type",
+      "fieldType" : "PetType",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "visits",
+      "fieldType" : "List<VisitDetails>",
+      "annotations" : [ ]
+    } ],
+    "methods" : [ {
+      "methodName" : "aPetDetails",
+      "signature" : "public static PetDetailsBuilder aPetDetails()",
+      "returnType" : "PetDetailsBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return new PetDetailsBuilder();\n}"
+    }, {
+      "methodName" : "id",
+      "signature" : "public PetDetailsBuilder id(int id)",
+      "returnType" : "PetDetailsBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "id",
+        "parameterType" : "int",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.id = id;\n    return this;\n}"
+    }, {
+      "methodName" : "name",
+      "signature" : "public PetDetailsBuilder name(String name)",
+      "returnType" : "PetDetailsBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "name",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.name = name;\n    return this;\n}"
+    }, {
+      "methodName" : "birthDate",
+      "signature" : "public PetDetailsBuilder birthDate(String birthDate)",
+      "returnType" : "PetDetailsBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "birthDate",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.birthDate = birthDate;\n    return this;\n}"
+    }, {
+      "methodName" : "type",
+      "signature" : "public PetDetailsBuilder type(PetType type)",
+      "returnType" : "PetDetailsBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "type",
+        "parameterType" : "PetType",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.type = type;\n    return this;\n}"
+    }, {
+      "methodName" : "visits",
+      "signature" : "public PetDetailsBuilder visits(List<VisitDetails> visits)",
+      "returnType" : "PetDetailsBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "visits",
+        "parameterType" : "List<VisitDetails>",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.visits = visits;\n    return this;\n}"
+    }, {
+      "methodName" : "build",
+      "signature" : "public PetDetails build()",
+      "returnType" : "PetDetails",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return new PetDetails(id, name, birthDate, type, visits);\n}"
+    } ],
+    "constructors" : [ {
+      "signature" : "private PetDetailsBuilder()",
+      "annotations" : [ ],
+      "parameters" : [ ]
+    } ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.api.dto",
+    "className" : "OwnerDetailsBuilder",
+    "role" : "UNKNOWN",
+    "annotations" : [ ],
+    "annotationDetails" : [ ],
+    "dependencies" : [ "OwnerDetailsBuilder" ],
+    "fields" : [ {
+      "fieldName" : "id",
+      "fieldType" : "int",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "firstName",
+      "fieldType" : "String",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "lastName",
+      "fieldType" : "String",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "address",
+      "fieldType" : "String",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "city",
+      "fieldType" : "String",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "telephone",
+      "fieldType" : "String",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "pets",
+      "fieldType" : "List<PetDetails>",
+      "annotations" : [ ]
+    } ],
+    "methods" : [ {
+      "methodName" : "anOwnerDetails",
+      "signature" : "public static OwnerDetailsBuilder anOwnerDetails()",
+      "returnType" : "OwnerDetailsBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return new OwnerDetailsBuilder();\n}"
+    }, {
+      "methodName" : "id",
+      "signature" : "public OwnerDetailsBuilder id(int id)",
+      "returnType" : "OwnerDetailsBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "id",
+        "parameterType" : "int",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.id = id;\n    return this;\n}"
+    }, {
+      "methodName" : "firstName",
+      "signature" : "public OwnerDetailsBuilder firstName(String firstName)",
+      "returnType" : "OwnerDetailsBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "firstName",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.firstName = firstName;\n    return this;\n}"
+    }, {
+      "methodName" : "lastName",
+      "signature" : "public OwnerDetailsBuilder lastName(String lastName)",
+      "returnType" : "OwnerDetailsBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "lastName",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.lastName = lastName;\n    return this;\n}"
+    }, {
+      "methodName" : "address",
+      "signature" : "public OwnerDetailsBuilder address(String address)",
+      "returnType" : "OwnerDetailsBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "address",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.address = address;\n    return this;\n}"
+    }, {
+      "methodName" : "city",
+      "signature" : "public OwnerDetailsBuilder city(String city)",
+      "returnType" : "OwnerDetailsBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "city",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.city = city;\n    return this;\n}"
+    }, {
+      "methodName" : "telephone",
+      "signature" : "public OwnerDetailsBuilder telephone(String telephone)",
+      "returnType" : "OwnerDetailsBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "telephone",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.telephone = telephone;\n    return this;\n}"
+    }, {
+      "methodName" : "pets",
+      "signature" : "public OwnerDetailsBuilder pets(List<PetDetails> pets)",
+      "returnType" : "OwnerDetailsBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "pets",
+        "parameterType" : "List<PetDetails>",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.pets = pets;\n    return this;\n}"
+    }, {
+      "methodName" : "build",
+      "signature" : "public OwnerDetails build()",
+      "returnType" : "OwnerDetails",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return new OwnerDetails(id, firstName, lastName, address, city, telephone, pets);\n}"
+    } ],
+    "constructors" : [ {
+      "signature" : "private OwnerDetailsBuilder()",
+      "annotations" : [ ],
+      "parameters" : [ ]
+    } ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.api.boundary.web",
+    "className" : "ApiGatewayController",
+    "role" : "CONTROLLER",
+    "annotations" : [ "RestController", "RequestMapping" ],
+    "annotationDetails" : [ {
+      "name" : "RestController",
+      "attributes" : { }
+    }, {
+      "name" : "RequestMapping",
+      "attributes" : {
+        "value" : [ "/api/gateway" ]
+      }
+    } ],
+    "dependencies" : [ "CustomersServiceClient", "VisitsServiceClient" ],
+    "fields" : [ {
+      "fieldName" : "customersServiceClient",
+      "fieldType" : "CustomersServiceClient",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "visitsServiceClient",
+      "fieldType" : "VisitsServiceClient",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "cbFactory",
+      "fieldType" : "ReactiveCircuitBreakerFactory",
+      "annotations" : [ ]
+    } ],
+    "methods" : [ {
+      "methodName" : "getOwnerDetails",
+      "signature" : "public Mono<OwnerDetails> getOwnerDetails(@PathVariable final int ownerId)",
+      "returnType" : "Mono<OwnerDetails>",
+      "annotations" : [ "GetMapping" ],
+      "annotationDetails" : [ {
+        "name" : "GetMapping",
+        "attributes" : {
+          "value" : [ "owners/{ownerId}" ]
+        }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "ownerId",
+        "parameterType" : "int",
+        "annotations" : [ "PathVariable" ]
+      } ],
+      "calls" : [ "CustomersServiceClient.getOwner", "VisitsServiceClient.getVisitsForPets" ],
+      "methodBody" : "{\n    return customersServiceClient.getOwner(ownerId).flatMap(owner -> visitsServiceClient.getVisitsForPets(owner.getPetIds()).transform(it -> {\n        ReactiveCircuitBreaker cb = cbFactory.create(\"getOwnerDetails\");\n        return cb.run(it, throwable -> emptyVisitsForPets());\n    }).map(addVisitsToOwner(owner)));\n}"
+    }, {
+      "methodName" : "addVisitsToOwner",
+      "signature" : "private Function<Visits, OwnerDetails> addVisitsToOwner(OwnerDetails owner)",
+      "returnType" : "Function<Visits,OwnerDetails>",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "owner",
+        "parameterType" : "OwnerDetails",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return visits -> {\n        owner.pets().forEach(pet -> pet.visits().addAll(visits.items().stream().filter(v -> v.petId() == pet.id()).toList()));\n        return owner;\n    };\n}"
+    }, {
+      "methodName" : "emptyVisitsForPets",
+      "signature" : "private Mono<Visits> emptyVisitsForPets()",
+      "returnType" : "Mono<Visits>",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return Mono.just(new Visits(List.of()));\n}"
+    } ],
+    "constructors" : [ {
+      "signature" : "public ApiGatewayController(CustomersServiceClient customersServiceClient, VisitsServiceClient visitsServiceClient, ReactiveCircuitBreakerFactory cbFactory)",
+      "annotations" : [ ],
+      "parameters" : [ {
+        "parameterName" : "customersServiceClient",
+        "parameterType" : "CustomersServiceClient",
+        "annotations" : [ ]
+      }, {
+        "parameterName" : "visitsServiceClient",
+        "parameterType" : "VisitsServiceClient",
+        "annotations" : [ ]
+      }, {
+        "parameterName" : "cbFactory",
+        "parameterType" : "ReactiveCircuitBreakerFactory",
+        "annotations" : [ ]
+      } ]
+    } ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.api.boundary.web",
+    "className" : "FallbackController",
+    "role" : "CONTROLLER",
+    "annotations" : [ "RestController" ],
+    "annotationDetails" : [ {
+      "name" : "RestController",
+      "attributes" : { }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ ],
+    "methods" : [ {
+      "methodName" : "fallback",
+      "signature" : "public ResponseEntity<String> fallback()",
+      "returnType" : "ResponseEntity<String>",
+      "annotations" : [ "PostMapping" ],
+      "annotationDetails" : [ {
+        "name" : "PostMapping",
+        "attributes" : {
+          "value" : [ "/fallback" ]
+        }
+      } ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return ResponseEntity.status(HttpStatus.SC_SERVICE_UNAVAILABLE).body(\"Chat is currently unavailable. Please try again later.\");\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.api",
+    "className" : "ApiGatewayApplication",
+    "role" : "CONFIGURATION",
+    "annotations" : [ "EnableDiscoveryClient", "SpringBootApplication" ],
+    "annotationDetails" : [ {
+      "name" : "EnableDiscoveryClient",
+      "attributes" : { }
+    }, {
+      "name" : "SpringBootApplication",
+      "attributes" : { }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ {
+      "fieldName" : "indexHtml",
+      "fieldType" : "Resource",
+      "annotations" : [ "Value" ]
+    } ],
+    "methods" : [ {
+      "methodName" : "main",
+      "signature" : "public static void main(String[] args)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "args",
+        "parameterType" : "String[]",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    SpringApplication.run(ApiGatewayApplication.class, args);\n}"
+    }, {
+      "methodName" : "loadBalancedRestTemplate",
+      "signature" : " RestTemplate loadBalancedRestTemplate()",
+      "returnType" : "RestTemplate",
+      "annotations" : [ "Bean", "LoadBalanced" ],
+      "annotationDetails" : [ {
+        "name" : "Bean",
+        "attributes" : { }
+      }, {
+        "name" : "LoadBalanced",
+        "attributes" : { }
+      } ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return new RestTemplate();\n}"
+    }, {
+      "methodName" : "loadBalancedWebClientBuilder",
+      "signature" : "public WebClient.Builder loadBalancedWebClientBuilder()",
+      "returnType" : "WebClient.Builder",
+      "annotations" : [ "Bean", "LoadBalanced" ],
+      "annotationDetails" : [ {
+        "name" : "Bean",
+        "attributes" : { }
+      }, {
+        "name" : "LoadBalanced",
+        "attributes" : { }
+      } ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return WebClient.builder();\n}"
+    }, {
+      "methodName" : "routerFunction",
+      "signature" : " RouterFunction<?> routerFunction()",
+      "returnType" : "RouterFunction<?>",
+      "annotations" : [ "Bean" ],
+      "annotationDetails" : [ {
+        "name" : "Bean",
+        "attributes" : { }
+      } ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    RouterFunction router = RouterFunctions.resources(\"/**\", new ClassPathResource(\"static/\")).andRoute(RequestPredicates.GET(\"/\"), request -> ServerResponse.ok().contentType(MediaType.TEXT_HTML).bodyValue(indexHtml));\n    return router;\n}"
+    }, {
+      "methodName" : "defaultCustomizer",
+      "signature" : "public Customizer<ReactiveResilience4JCircuitBreakerFactory> defaultCustomizer()",
+      "returnType" : "Customizer<ReactiveResilience4JCircuitBreakerFactory>",
+      "annotations" : [ "Bean" ],
+      "annotationDetails" : [ {
+        "name" : "Bean",
+        "attributes" : { }
+      } ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return factory -> factory.configureDefault(id -> new Resilience4JConfigBuilder(id).circuitBreakerConfig(CircuitBreakerConfig.ofDefaults()).timeLimiterConfig(TimeLimiterConfig.custom().timeoutDuration(Duration.ofSeconds(10)).build()).build());\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.api.application",
+    "className" : "CustomersServiceClient",
+    "role" : "SERVICE_CLIENT",
+    "annotations" : [ "Component" ],
+    "annotationDetails" : [ {
+      "name" : "Component",
+      "attributes" : { }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ {
+      "fieldName" : "webClientBuilder",
+      "fieldType" : "WebClient.Builder",
+      "annotations" : [ ]
+    } ],
+    "methods" : [ {
+      "methodName" : "getOwner",
+      "signature" : "public Mono<OwnerDetails> getOwner(final int ownerId)",
+      "returnType" : "Mono<OwnerDetails>",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "ownerId",
+        "parameterType" : "int",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return webClientBuilder.build().get().uri(\"http://customers-service/owners/{ownerId}\", ownerId).retrieve().bodyToMono(OwnerDetails.class);\n}"
+    } ],
+    "constructors" : [ {
+      "signature" : "public CustomersServiceClient(WebClient.Builder webClientBuilder)",
+      "annotations" : [ ],
+      "parameters" : [ {
+        "parameterName" : "webClientBuilder",
+        "parameterType" : "WebClient.Builder",
+        "annotations" : [ ]
+      } ]
+    } ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ {
+      "serviceName" : "customers-service",
+      "httpMethod" : "GET",
+      "path" : "owners/{ownerId}"
+    } ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.api.application",
+    "className" : "VisitsServiceClient",
+    "role" : "SERVICE_CLIENT",
+    "annotations" : [ "Component" ],
+    "annotationDetails" : [ {
+      "name" : "Component",
+      "attributes" : { }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ {
+      "fieldName" : "hostname",
+      "fieldType" : "String",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "webClientBuilder",
+      "fieldType" : "WebClient.Builder",
+      "annotations" : [ ]
+    } ],
+    "methods" : [ {
+      "methodName" : "getVisitsForPets",
+      "signature" : "public Mono<Visits> getVisitsForPets(final List<Integer> petIds)",
+      "returnType" : "Mono<Visits>",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "petIds",
+        "parameterType" : "List<Integer>",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return webClientBuilder.build().get().uri(hostname + \"pets/visits?petId={petId}\", joinIds(petIds)).retrieve().bodyToMono(Visits.class);\n}"
+    }, {
+      "methodName" : "joinIds",
+      "signature" : "private String joinIds(List<Integer> petIds)",
+      "returnType" : "String",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "petIds",
+        "parameterType" : "List<Integer>",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return petIds.stream().map(Object::toString).collect(joining(\",\"));\n}"
+    }, {
+      "methodName" : "setHostname",
+      "signature" : " void setHostname(String hostname)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "hostname",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.hostname = hostname;\n}"
+    } ],
+    "constructors" : [ {
+      "signature" : "public VisitsServiceClient(WebClient.Builder webClientBuilder)",
+      "annotations" : [ ],
+      "parameters" : [ {
+        "parameterName" : "webClientBuilder",
+        "parameterType" : "WebClient.Builder",
+        "annotations" : [ ]
+      } ]
+    } ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ {
+      "serviceName" : "visits-service",
+      "httpMethod" : "GET",
+      "path" : "pets/visits"
+    } ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.customers",
+    "className" : "CustomersServiceApplication",
+    "role" : "CONFIGURATION",
+    "annotations" : [ "EnableDiscoveryClient", "SpringBootApplication" ],
+    "annotationDetails" : [ {
+      "name" : "EnableDiscoveryClient",
+      "attributes" : { }
+    }, {
+      "name" : "SpringBootApplication",
+      "attributes" : { }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ ],
+    "methods" : [ {
+      "methodName" : "main",
+      "signature" : "public static void main(String[] args)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "args",
+        "parameterType" : "String[]",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    SpringApplication.run(CustomersServiceApplication.class, args);\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.customers.config",
+    "className" : "MetricConfig",
+    "role" : "CONFIGURATION",
+    "annotations" : [ "Configuration" ],
+    "annotationDetails" : [ {
+      "name" : "Configuration",
+      "attributes" : { }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ ],
+    "methods" : [ {
+      "methodName" : "metricsCommonTags",
+      "signature" : " MeterRegistryCustomizer<@NonNull MeterRegistry> metricsCommonTags()",
+      "returnType" : "MeterRegistryCustomizer<MeterRegistry>",
+      "annotations" : [ "Bean" ],
+      "annotationDetails" : [ {
+        "name" : "Bean",
+        "attributes" : { }
+      } ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return registry -> registry.config().commonTags(\"application\", \"petclinic\");\n}"
+    }, {
+      "methodName" : "timedAspect",
+      "signature" : " TimedAspect timedAspect(MeterRegistry registry)",
+      "returnType" : "TimedAspect",
+      "annotations" : [ "Bean" ],
+      "annotationDetails" : [ {
+        "name" : "Bean",
+        "attributes" : { }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "registry",
+        "parameterType" : "MeterRegistry",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return new TimedAspect(registry);\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.customers.web",
+    "className" : "ResourceNotFoundException",
+    "role" : "EXCEPTION_HANDLER",
+    "annotations" : [ "ResponseStatus" ],
+    "annotationDetails" : [ {
+      "name" : "ResponseStatus",
+      "attributes" : {
+        "value" : [ "NOT_FOUND" ]
+      }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ ],
+    "methods" : [ ],
+    "constructors" : [ {
+      "signature" : "public ResourceNotFoundException(String message)",
+      "annotations" : [ ],
+      "parameters" : [ {
+        "parameterName" : "message",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ]
+    } ],
+    "extendedTypes" : [ "RuntimeException" ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.customers.web",
+    "className" : "PetResource",
+    "role" : "CONTROLLER",
+    "annotations" : [ "RestController", "Timed" ],
+    "annotationDetails" : [ {
+      "name" : "RestController",
+      "attributes" : { }
+    }, {
+      "name" : "Timed",
+      "attributes" : {
+        "value" : [ "petclinic.pet" ]
+      }
+    } ],
+    "dependencies" : [ "PetRepository", "OwnerRepository", "PetType", "Pet" ],
+    "fields" : [ {
+      "fieldName" : "log",
+      "fieldType" : "Logger",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "petRepository",
+      "fieldType" : "PetRepository",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "ownerRepository",
+      "fieldType" : "OwnerRepository",
+      "annotations" : [ ]
+    } ],
+    "methods" : [ {
+      "methodName" : "getPetTypes",
+      "signature" : "public List<PetType> getPetTypes()",
+      "returnType" : "List<PetType>",
+      "annotations" : [ "GetMapping" ],
+      "annotationDetails" : [ {
+        "name" : "GetMapping",
+        "attributes" : {
+          "value" : [ "/petTypes" ]
+        }
+      } ],
+      "parameters" : [ ],
+      "calls" : [ "PetRepository.findPetTypes" ],
+      "methodBody" : "{\n    return petRepository.findPetTypes();\n}"
+    }, {
+      "methodName" : "processCreationForm",
+      "signature" : "public Pet processCreationForm(@RequestBody PetRequest petRequest, @PathVariable(\"ownerId\") @Min(1) int ownerId)",
+      "returnType" : "Pet",
+      "annotations" : [ "PostMapping", "ResponseStatus" ],
+      "annotationDetails" : [ {
+        "name" : "PostMapping",
+        "attributes" : {
+          "value" : [ "/owners/{ownerId}/pets" ]
+        }
+      }, {
+        "name" : "ResponseStatus",
+        "attributes" : {
+          "value" : [ "CREATED" ]
+        }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "petRequest",
+        "parameterType" : "PetRequest",
+        "annotations" : [ "RequestBody" ]
+      }, {
+        "parameterName" : "ownerId",
+        "parameterType" : "int",
+        "annotations" : [ "PathVariable", "Min" ]
+      } ],
+      "calls" : [ "OwnerRepository.findById" ],
+      "methodBody" : "{\n    Owner owner = ownerRepository.findById(ownerId).orElseThrow(() -> new ResourceNotFoundException(\"Owner \" + ownerId + \" not found\"));\n    final Pet pet = new Pet();\n    owner.addPet(pet);\n    return save(pet, petRequest);\n}"
+    }, {
+      "methodName" : "processUpdateForm",
+      "signature" : "public void processUpdateForm(@RequestBody PetRequest petRequest)",
+      "returnType" : "void",
+      "annotations" : [ "PutMapping", "ResponseStatus" ],
+      "annotationDetails" : [ {
+        "name" : "PutMapping",
+        "attributes" : {
+          "value" : [ "/owners/*/pets/{petId}" ]
+        }
+      }, {
+        "name" : "ResponseStatus",
+        "attributes" : {
+          "value" : [ "NO_CONTENT" ]
+        }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "petRequest",
+        "parameterType" : "PetRequest",
+        "annotations" : [ "RequestBody" ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    int petId = petRequest.id();\n    Pet pet = findPetById(petId);\n    save(pet, petRequest);\n}"
+    }, {
+      "methodName" : "save",
+      "signature" : "private Pet save(final Pet pet, final PetRequest petRequest)",
+      "returnType" : "Pet",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "pet",
+        "parameterType" : "Pet",
+        "annotations" : [ ]
+      }, {
+        "parameterName" : "petRequest",
+        "parameterType" : "PetRequest",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ "PetRepository.findPetTypeById", "PetRepository.save" ],
+      "methodBody" : "{\n    pet.setName(petRequest.name());\n    pet.setBirthDate(petRequest.birthDate());\n    petRepository.findPetTypeById(petRequest.typeId()).ifPresent(pet::setType);\n    log.info(\"Saving pet {}\", pet);\n    return petRepository.save(pet);\n}"
+    }, {
+      "methodName" : "findPet",
+      "signature" : "public PetDetails findPet(@PathVariable(\"petId\") int petId)",
+      "returnType" : "PetDetails",
+      "annotations" : [ "GetMapping" ],
+      "annotationDetails" : [ {
+        "name" : "GetMapping",
+        "attributes" : {
+          "value" : [ "owners/*/pets/{petId}" ]
+        }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "petId",
+        "parameterType" : "int",
+        "annotations" : [ "PathVariable" ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    Pet pet = findPetById(petId);\n    return new PetDetails(pet);\n}"
+    }, {
+      "methodName" : "findPetById",
+      "signature" : "private Pet findPetById(int petId)",
+      "returnType" : "Pet",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "petId",
+        "parameterType" : "int",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ "PetRepository.findById" ],
+      "methodBody" : "{\n    return petRepository.findById(petId).orElseThrow(() -> new ResourceNotFoundException(\"Pet \" + petId + \" not found\"));\n}"
+    } ],
+    "constructors" : [ {
+      "signature" : " PetResource(PetRepository petRepository, OwnerRepository ownerRepository)",
+      "annotations" : [ ],
+      "parameters" : [ {
+        "parameterName" : "petRepository",
+        "parameterType" : "PetRepository",
+        "annotations" : [ ]
+      }, {
+        "parameterName" : "ownerRepository",
+        "parameterType" : "OwnerRepository",
+        "annotations" : [ ]
+      } ]
+    } ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.customers.web.mapper",
+    "className" : "Mapper",
+    "role" : "UNKNOWN",
+    "annotations" : [ ],
+    "annotationDetails" : [ ],
+    "dependencies" : [ ],
+    "fields" : [ ],
+    "methods" : [ {
+      "methodName" : "map",
+      "signature" : " abstract E map(E response, R request)",
+      "returnType" : "E",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "response",
+        "parameterType" : "E",
+        "annotations" : [ ]
+      }, {
+        "parameterName" : "request",
+        "parameterType" : "R",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : null
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.customers.web.mapper",
+    "className" : "OwnerEntityMapper",
+    "role" : "COMPONENT",
+    "annotations" : [ "Component" ],
+    "annotationDetails" : [ {
+      "name" : "Component",
+      "attributes" : { }
+    } ],
+    "dependencies" : [ "Mapper", "Owner" ],
+    "fields" : [ ],
+    "methods" : [ {
+      "methodName" : "map",
+      "signature" : "public Owner map(final Owner owner, final OwnerRequest request)",
+      "returnType" : "Owner",
+      "annotations" : [ "Override" ],
+      "annotationDetails" : [ {
+        "name" : "Override",
+        "attributes" : { }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "owner",
+        "parameterType" : "Owner",
+        "annotations" : [ ]
+      }, {
+        "parameterName" : "request",
+        "parameterType" : "OwnerRequest",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    owner.setAddress(request.address());\n    owner.setCity(request.city());\n    owner.setTelephone(request.telephone());\n    owner.setFirstName(request.firstName());\n    owner.setLastName(request.lastName());\n    return owner;\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ "Mapper<OwnerRequest,Owner>" ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.customers.web",
+    "className" : "OwnerResource",
+    "role" : "CONTROLLER",
+    "annotations" : [ "RequestMapping", "RestController", "Timed" ],
+    "annotationDetails" : [ {
+      "name" : "RequestMapping",
+      "attributes" : {
+        "value" : [ "/owners" ]
+      }
+    }, {
+      "name" : "RestController",
+      "attributes" : { }
+    }, {
+      "name" : "Timed",
+      "attributes" : {
+        "value" : [ "petclinic.owner" ]
+      }
+    } ],
+    "dependencies" : [ "OwnerRepository", "OwnerEntityMapper", "Owner" ],
+    "fields" : [ {
+      "fieldName" : "log",
+      "fieldType" : "Logger",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "ownerRepository",
+      "fieldType" : "OwnerRepository",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "ownerEntityMapper",
+      "fieldType" : "OwnerEntityMapper",
+      "annotations" : [ ]
+    } ],
+    "methods" : [ {
+      "methodName" : "createOwner",
+      "signature" : "public Owner createOwner(@Valid @RequestBody OwnerRequest ownerRequest)",
+      "returnType" : "Owner",
+      "annotations" : [ "PostMapping", "ResponseStatus" ],
+      "annotationDetails" : [ {
+        "name" : "PostMapping",
+        "attributes" : { }
+      }, {
+        "name" : "ResponseStatus",
+        "attributes" : {
+          "value" : [ "CREATED" ]
+        }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "ownerRequest",
+        "parameterType" : "OwnerRequest",
+        "annotations" : [ "Valid", "RequestBody" ]
+      } ],
+      "calls" : [ "OwnerEntityMapper.map", "OwnerRepository.save" ],
+      "methodBody" : "{\n    Owner owner = ownerEntityMapper.map(new Owner(), ownerRequest);\n    return ownerRepository.save(owner);\n}"
+    }, {
+      "methodName" : "findOwner",
+      "signature" : "public Optional<Owner> findOwner(@PathVariable(\"ownerId\") @Min(1) int ownerId)",
+      "returnType" : "Optional<Owner>",
+      "annotations" : [ "GetMapping" ],
+      "annotationDetails" : [ {
+        "name" : "GetMapping",
+        "attributes" : {
+          "value" : [ "/{ownerId}" ]
+        }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "ownerId",
+        "parameterType" : "int",
+        "annotations" : [ "PathVariable", "Min" ]
+      } ],
+      "calls" : [ "OwnerRepository.findById" ],
+      "methodBody" : "{\n    return ownerRepository.findById(ownerId);\n}"
+    }, {
+      "methodName" : "findAll",
+      "signature" : "public List<Owner> findAll()",
+      "returnType" : "List<Owner>",
+      "annotations" : [ "GetMapping" ],
+      "annotationDetails" : [ {
+        "name" : "GetMapping",
+        "attributes" : { }
+      } ],
+      "parameters" : [ ],
+      "calls" : [ "OwnerRepository.findAll" ],
+      "methodBody" : "{\n    return ownerRepository.findAll();\n}"
+    }, {
+      "methodName" : "updateOwner",
+      "signature" : "public void updateOwner(@PathVariable(\"ownerId\") @Min(1) int ownerId, @Valid @RequestBody OwnerRequest ownerRequest)",
+      "returnType" : "void",
+      "annotations" : [ "PutMapping", "ResponseStatus" ],
+      "annotationDetails" : [ {
+        "name" : "PutMapping",
+        "attributes" : {
+          "value" : [ "/{ownerId}" ]
+        }
+      }, {
+        "name" : "ResponseStatus",
+        "attributes" : {
+          "value" : [ "NO_CONTENT" ]
+        }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "ownerId",
+        "parameterType" : "int",
+        "annotations" : [ "PathVariable", "Min" ]
+      }, {
+        "parameterName" : "ownerRequest",
+        "parameterType" : "OwnerRequest",
+        "annotations" : [ "Valid", "RequestBody" ]
+      } ],
+      "calls" : [ "OwnerRepository.findById", "OwnerEntityMapper.map", "OwnerRepository.save" ],
+      "methodBody" : "{\n    final Owner ownerModel = ownerRepository.findById(ownerId).orElseThrow(() -> new ResourceNotFoundException(\"Owner \" + ownerId + \" not found\"));\n    ownerEntityMapper.map(ownerModel, ownerRequest);\n    log.info(\"Saving owner {}\", ownerModel);\n    ownerRepository.save(ownerModel);\n}"
+    } ],
+    "constructors" : [ {
+      "signature" : " OwnerResource(OwnerRepository ownerRepository, OwnerEntityMapper ownerEntityMapper)",
+      "annotations" : [ ],
+      "parameters" : [ {
+        "parameterName" : "ownerRepository",
+        "parameterType" : "OwnerRepository",
+        "annotations" : [ ]
+      }, {
+        "parameterName" : "ownerEntityMapper",
+        "parameterType" : "OwnerEntityMapper",
+        "annotations" : [ ]
+      } ]
+    } ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.customers.model",
+    "className" : "Pet",
+    "role" : "ENTITY",
+    "annotations" : [ "Entity", "Table" ],
+    "annotationDetails" : [ {
+      "name" : "Entity",
+      "attributes" : { }
+    }, {
+      "name" : "Table",
+      "attributes" : {
+        "name" : [ "pets" ]
+      }
+    } ],
+    "dependencies" : [ "PetType", "Owner" ],
+    "fields" : [ {
+      "fieldName" : "id",
+      "fieldType" : "Integer",
+      "annotations" : [ "Id", "GeneratedValue" ]
+    }, {
+      "fieldName" : "name",
+      "fieldType" : "String",
+      "annotations" : [ "Column" ]
+    }, {
+      "fieldName" : "birthDate",
+      "fieldType" : "Date",
+      "annotations" : [ "Column", "Temporal" ]
+    }, {
+      "fieldName" : "type",
+      "fieldType" : "PetType",
+      "annotations" : [ "ManyToOne", "JoinColumn" ]
+    }, {
+      "fieldName" : "owner",
+      "fieldType" : "Owner",
+      "annotations" : [ "ManyToOne", "JoinColumn", "JsonIgnore" ]
+    } ],
+    "methods" : [ {
+      "methodName" : "toString",
+      "signature" : "public String toString()",
+      "returnType" : "String",
+      "annotations" : [ "Override" ],
+      "annotationDetails" : [ {
+        "name" : "Override",
+        "attributes" : { }
+      } ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return new ToStringCreator(this).append(\"id\", this.getId()).append(\"name\", this.getName()).append(\"birthDate\", this.getBirthDate()).append(\"type\", this.getType().getName()).append(\"ownerFirstname\", this.getOwner().getFirstName()).append(\"ownerLastname\", this.getOwner().getLastName()).toString();\n}"
+    }, {
+      "methodName" : "getId",
+      "signature" : "public Integer getId()",
+      "returnType" : "Integer",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.id;\n}"
+    }, {
+      "methodName" : "getName",
+      "signature" : "public String getName()",
+      "returnType" : "String",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.name;\n}"
+    }, {
+      "methodName" : "getBirthDate",
+      "signature" : "public Date getBirthDate()",
+      "returnType" : "Date",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.birthDate;\n}"
+    }, {
+      "methodName" : "getType",
+      "signature" : "public PetType getType()",
+      "returnType" : "PetType",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.type;\n}"
+    }, {
+      "methodName" : "getOwner",
+      "signature" : "public Owner getOwner()",
+      "returnType" : "Owner",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.owner;\n}"
+    }, {
+      "methodName" : "setId",
+      "signature" : "public void setId(Integer id)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "id",
+        "parameterType" : "Integer",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.id = id;\n}"
+    }, {
+      "methodName" : "setName",
+      "signature" : "public void setName(String name)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "name",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.name = name;\n}"
+    }, {
+      "methodName" : "setBirthDate",
+      "signature" : "public void setBirthDate(Date birthDate)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "birthDate",
+        "parameterType" : "Date",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.birthDate = birthDate;\n}"
+    }, {
+      "methodName" : "setType",
+      "signature" : "public void setType(PetType type)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "type",
+        "parameterType" : "PetType",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.type = type;\n}"
+    }, {
+      "methodName" : "setOwner",
+      "signature" : "public void setOwner(Owner owner)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "owner",
+        "parameterType" : "Owner",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.owner = owner;\n}"
+    }, {
+      "methodName" : "equals",
+      "signature" : "public boolean equals(Object o)",
+      "returnType" : "boolean",
+      "annotations" : [ "Override" ],
+      "annotationDetails" : [ {
+        "name" : "Override",
+        "attributes" : { }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "o",
+        "parameterType" : "Object",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    if (o == null || getClass() != o.getClass())\n        return false;\n    Pet pet = (Pet) o;\n    return Objects.equals(id, pet.id) && Objects.equals(name, pet.name) && Objects.equals(birthDate, pet.birthDate) && Objects.equals(type, pet.type) && Objects.equals(owner, pet.owner);\n}"
+    }, {
+      "methodName" : "hashCode",
+      "signature" : "public int hashCode()",
+      "returnType" : "int",
+      "annotations" : [ "Override" ],
+      "annotationDetails" : [ {
+        "name" : "Override",
+        "attributes" : { }
+      } ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return Objects.hash(id, name, birthDate, type, owner);\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.customers.model",
+    "className" : "PetRepository",
+    "role" : "REPOSITORY",
+    "annotations" : [ ],
+    "annotationDetails" : [ ],
+    "dependencies" : [ "Pet", "PetType" ],
+    "fields" : [ ],
+    "methods" : [ {
+      "methodName" : "findPetTypes",
+      "signature" : " abstract List<PetType> findPetTypes()",
+      "returnType" : "List<PetType>",
+      "annotations" : [ "Query" ],
+      "annotationDetails" : [ {
+        "name" : "Query",
+        "attributes" : {
+          "value" : [ "SELECT ptype FROM PetType ptype ORDER BY ptype.name" ]
+        }
+      } ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : null
+    }, {
+      "methodName" : "findPetTypeById",
+      "signature" : " abstract Optional<PetType> findPetTypeById(@Param(\"typeId\") int typeId)",
+      "returnType" : "Optional<PetType>",
+      "annotations" : [ "Query" ],
+      "annotationDetails" : [ {
+        "name" : "Query",
+        "attributes" : {
+          "value" : [ "FROM PetType ptype WHERE ptype.id = :typeId" ]
+        }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "typeId",
+        "parameterType" : "int",
+        "annotations" : [ "Param" ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : null
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ "JpaRepository<Pet,Integer>" ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.customers.model",
+    "className" : "OwnerRepository",
+    "role" : "REPOSITORY",
+    "annotations" : [ ],
+    "annotationDetails" : [ ],
+    "dependencies" : [ "Owner" ],
+    "fields" : [ ],
+    "methods" : [ ],
+    "constructors" : [ ],
+    "extendedTypes" : [ "JpaRepository<Owner,Integer>" ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.customers.model",
+    "className" : "Owner",
+    "role" : "ENTITY",
+    "annotations" : [ "Entity", "Table" ],
+    "annotationDetails" : [ {
+      "name" : "Entity",
+      "attributes" : { }
+    }, {
+      "name" : "Table",
+      "attributes" : {
+        "name" : [ "owners" ]
+      }
+    } ],
+    "dependencies" : [ "Pet" ],
+    "fields" : [ {
+      "fieldName" : "id",
+      "fieldType" : "Integer",
+      "annotations" : [ "Id", "GeneratedValue" ]
+    }, {
+      "fieldName" : "firstName",
+      "fieldType" : "String",
+      "annotations" : [ "Column", "NotBlank" ]
+    }, {
+      "fieldName" : "lastName",
+      "fieldType" : "String",
+      "annotations" : [ "Column", "NotBlank" ]
+    }, {
+      "fieldName" : "address",
+      "fieldType" : "String",
+      "annotations" : [ "Column", "NotBlank" ]
+    }, {
+      "fieldName" : "city",
+      "fieldType" : "String",
+      "annotations" : [ "Column", "NotBlank" ]
+    }, {
+      "fieldName" : "telephone",
+      "fieldType" : "String",
+      "annotations" : [ "Column", "NotBlank", "Digits" ]
+    }, {
+      "fieldName" : "pets",
+      "fieldType" : "Set<Pet>",
+      "annotations" : [ "OneToMany" ]
+    } ],
+    "methods" : [ {
+      "methodName" : "getPetsInternal",
+      "signature" : "protected Set<Pet> getPetsInternal()",
+      "returnType" : "Set<Pet>",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    if (this.pets == null) {\n        this.pets = new HashSet<>();\n    }\n    return this.pets;\n}"
+    }, {
+      "methodName" : "getPets",
+      "signature" : "public List<Pet> getPets()",
+      "returnType" : "List<Pet>",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    final List<Pet> sortedPets = new ArrayList<>(getPetsInternal());\n    PropertyComparator.sort(sortedPets, new MutableSortDefinition(\"name\", true, true));\n    return Collections.unmodifiableList(sortedPets);\n}"
+    }, {
+      "methodName" : "addPet",
+      "signature" : "public void addPet(Pet pet)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "pet",
+        "parameterType" : "Pet",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    getPetsInternal().add(pet);\n    pet.setOwner(this);\n}"
+    }, {
+      "methodName" : "toString",
+      "signature" : "public String toString()",
+      "returnType" : "String",
+      "annotations" : [ "Override" ],
+      "annotationDetails" : [ {
+        "name" : "Override",
+        "attributes" : { }
+      } ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return new ToStringCreator(this).append(\"id\", this.getId()).append(\"lastName\", this.getLastName()).append(\"firstName\", this.getFirstName()).append(\"address\", this.address).append(\"city\", this.city).append(\"telephone\", this.telephone).toString();\n}"
+    }, {
+      "methodName" : "getId",
+      "signature" : "public Integer getId()",
+      "returnType" : "Integer",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.id;\n}"
+    }, {
+      "methodName" : "getFirstName",
+      "signature" : "public String getFirstName()",
+      "returnType" : "String",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.firstName;\n}"
+    }, {
+      "methodName" : "getLastName",
+      "signature" : "public String getLastName()",
+      "returnType" : "String",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.lastName;\n}"
+    }, {
+      "methodName" : "getAddress",
+      "signature" : "public String getAddress()",
+      "returnType" : "String",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.address;\n}"
+    }, {
+      "methodName" : "getCity",
+      "signature" : "public String getCity()",
+      "returnType" : "String",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.city;\n}"
+    }, {
+      "methodName" : "getTelephone",
+      "signature" : "public String getTelephone()",
+      "returnType" : "String",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.telephone;\n}"
+    }, {
+      "methodName" : "setFirstName",
+      "signature" : "public void setFirstName(String firstName)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "firstName",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.firstName = firstName;\n}"
+    }, {
+      "methodName" : "setLastName",
+      "signature" : "public void setLastName(String lastName)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "lastName",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.lastName = lastName;\n}"
+    }, {
+      "methodName" : "setAddress",
+      "signature" : "public void setAddress(String address)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "address",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.address = address;\n}"
+    }, {
+      "methodName" : "setCity",
+      "signature" : "public void setCity(String city)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "city",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.city = city;\n}"
+    }, {
+      "methodName" : "setTelephone",
+      "signature" : "public void setTelephone(String telephone)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "telephone",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.telephone = telephone;\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.customers.model",
+    "className" : "PetType",
+    "role" : "ENTITY",
+    "annotations" : [ "Entity", "Table" ],
+    "annotationDetails" : [ {
+      "name" : "Entity",
+      "attributes" : { }
+    }, {
+      "name" : "Table",
+      "attributes" : {
+        "name" : [ "types" ]
+      }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ {
+      "fieldName" : "id",
+      "fieldType" : "Integer",
+      "annotations" : [ "Id", "GeneratedValue" ]
+    }, {
+      "fieldName" : "name",
+      "fieldType" : "String",
+      "annotations" : [ "Column" ]
+    } ],
+    "methods" : [ {
+      "methodName" : "getId",
+      "signature" : "public Integer getId()",
+      "returnType" : "Integer",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.id;\n}"
+    }, {
+      "methodName" : "getName",
+      "signature" : "public String getName()",
+      "returnType" : "String",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.name;\n}"
+    }, {
+      "methodName" : "setId",
+      "signature" : "public void setId(Integer id)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "id",
+        "parameterType" : "Integer",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.id = id;\n}"
+    }, {
+      "methodName" : "setName",
+      "signature" : "public void setName(String name)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "name",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.name = name;\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.visits.config",
+    "className" : "MetricConfig",
+    "role" : "CONFIGURATION",
+    "annotations" : [ "Configuration" ],
+    "annotationDetails" : [ {
+      "name" : "Configuration",
+      "attributes" : { }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ ],
+    "methods" : [ {
+      "methodName" : "metricsCommonTags",
+      "signature" : " MeterRegistryCustomizer<@NonNull MeterRegistry> metricsCommonTags()",
+      "returnType" : "MeterRegistryCustomizer<MeterRegistry>",
+      "annotations" : [ "Bean" ],
+      "annotationDetails" : [ {
+        "name" : "Bean",
+        "attributes" : { }
+      } ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return registry -> registry.config().commonTags(\"application\", \"petclinic\");\n}"
+    }, {
+      "methodName" : "timedAspect",
+      "signature" : " TimedAspect timedAspect(MeterRegistry registry)",
+      "returnType" : "TimedAspect",
+      "annotations" : [ "Bean" ],
+      "annotationDetails" : [ {
+        "name" : "Bean",
+        "attributes" : { }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "registry",
+        "parameterType" : "MeterRegistry",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return new TimedAspect(registry);\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.visits.web",
+    "className" : "VisitResource",
+    "role" : "CONTROLLER",
+    "annotations" : [ "RestController", "Timed" ],
+    "annotationDetails" : [ {
+      "name" : "RestController",
+      "attributes" : { }
+    }, {
+      "name" : "Timed",
+      "attributes" : {
+        "value" : [ "petclinic.visit" ]
+      }
+    } ],
+    "dependencies" : [ "VisitRepository", "Visit" ],
+    "fields" : [ {
+      "fieldName" : "log",
+      "fieldType" : "Logger",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "visitRepository",
+      "fieldType" : "VisitRepository",
+      "annotations" : [ ]
+    } ],
+    "methods" : [ {
+      "methodName" : "create",
+      "signature" : "public Visit create(@Valid @RequestBody Visit visit, @PathVariable(\"petId\") @Min(1) int petId)",
+      "returnType" : "Visit",
+      "annotations" : [ "PostMapping", "ResponseStatus" ],
+      "annotationDetails" : [ {
+        "name" : "PostMapping",
+        "attributes" : {
+          "value" : [ "owners/*/pets/{petId}/visits" ]
+        }
+      }, {
+        "name" : "ResponseStatus",
+        "attributes" : {
+          "value" : [ "CREATED" ]
+        }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "visit",
+        "parameterType" : "Visit",
+        "annotations" : [ "Valid", "RequestBody" ]
+      }, {
+        "parameterName" : "petId",
+        "parameterType" : "int",
+        "annotations" : [ "PathVariable", "Min" ]
+      } ],
+      "calls" : [ "VisitRepository.save" ],
+      "methodBody" : "{\n    visit.setPetId(petId);\n    log.info(\"Saving visit {}\", visit);\n    return visitRepository.save(visit);\n}"
+    }, {
+      "methodName" : "read",
+      "signature" : "public List<Visit> read(@PathVariable(\"petId\") @Min(1) int petId)",
+      "returnType" : "List<Visit>",
+      "annotations" : [ "GetMapping" ],
+      "annotationDetails" : [ {
+        "name" : "GetMapping",
+        "attributes" : {
+          "value" : [ "owners/*/pets/{petId}/visits" ]
+        }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "petId",
+        "parameterType" : "int",
+        "annotations" : [ "PathVariable", "Min" ]
+      } ],
+      "calls" : [ "VisitRepository.findByPetId", "VisitRepository.findByPetIdIn" ],
+      "methodBody" : "{\n    return visitRepository.findByPetId(petId);\n}"
+    }, {
+      "methodName" : "read",
+      "signature" : "public Visits read(@RequestParam(\"petId\") List<Integer> petIds)",
+      "returnType" : "Visits",
+      "annotations" : [ "GetMapping" ],
+      "annotationDetails" : [ {
+        "name" : "GetMapping",
+        "attributes" : {
+          "value" : [ "pets/visits" ]
+        }
+      } ],
+      "parameters" : [ {
+        "parameterName" : "petIds",
+        "parameterType" : "List<Integer>",
+        "annotations" : [ "RequestParam" ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    final List<Visit> byPetIdIn = visitRepository.findByPetIdIn(petIds);\n    return new Visits(byPetIdIn);\n}"
+    } ],
+    "constructors" : [ {
+      "signature" : " VisitResource(VisitRepository visitRepository)",
+      "annotations" : [ ],
+      "parameters" : [ {
+        "parameterName" : "visitRepository",
+        "parameterType" : "VisitRepository",
+        "annotations" : [ ]
+      } ]
+    } ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.visits.model",
+    "className" : "VisitRepository",
+    "role" : "REPOSITORY",
+    "annotations" : [ ],
+    "annotationDetails" : [ ],
+    "dependencies" : [ "Visit" ],
+    "fields" : [ ],
+    "methods" : [ {
+      "methodName" : "findByPetId",
+      "signature" : " abstract List<Visit> findByPetId(int petId)",
+      "returnType" : "List<Visit>",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "petId",
+        "parameterType" : "int",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : null
+    }, {
+      "methodName" : "findByPetIdIn",
+      "signature" : " abstract List<Visit> findByPetIdIn(Collection<Integer> petIds)",
+      "returnType" : "List<Visit>",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "petIds",
+        "parameterType" : "Collection<Integer>",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : null
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ "JpaRepository<Visit,Integer>" ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.visits.model",
+    "className" : "Visit",
+    "role" : "ENTITY",
+    "annotations" : [ "Entity", "Table" ],
+    "annotationDetails" : [ {
+      "name" : "Entity",
+      "attributes" : { }
+    }, {
+      "name" : "Table",
+      "attributes" : {
+        "name" : [ "visits" ]
+      }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ {
+      "fieldName" : "id",
+      "fieldType" : "Integer",
+      "annotations" : [ "Id", "GeneratedValue" ]
+    }, {
+      "fieldName" : "date",
+      "fieldType" : "Date",
+      "annotations" : [ "Column", "Temporal", "JsonFormat" ]
+    }, {
+      "fieldName" : "description",
+      "fieldType" : "String",
+      "annotations" : [ "Size", "Column" ]
+    }, {
+      "fieldName" : "petId",
+      "fieldType" : "int",
+      "annotations" : [ "Column" ]
+    } ],
+    "methods" : [ {
+      "methodName" : "getId",
+      "signature" : "public Integer getId()",
+      "returnType" : "Integer",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.id;\n}"
+    }, {
+      "methodName" : "getDate",
+      "signature" : "public Date getDate()",
+      "returnType" : "Date",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.date;\n}"
+    }, {
+      "methodName" : "getDescription",
+      "signature" : "public String getDescription()",
+      "returnType" : "String",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.description;\n}"
+    }, {
+      "methodName" : "getPetId",
+      "signature" : "public int getPetId()",
+      "returnType" : "int",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return this.petId;\n}"
+    }, {
+      "methodName" : "setId",
+      "signature" : "public void setId(Integer id)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "id",
+        "parameterType" : "Integer",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.id = id;\n}"
+    }, {
+      "methodName" : "setDate",
+      "signature" : "public void setDate(Date date)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "date",
+        "parameterType" : "Date",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.date = date;\n}"
+    }, {
+      "methodName" : "setDescription",
+      "signature" : "public void setDescription(String description)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "description",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.description = description;\n}"
+    }, {
+      "methodName" : "setPetId",
+      "signature" : "public void setPetId(int petId)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "petId",
+        "parameterType" : "int",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.petId = petId;\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.visits.model",
+    "className" : "VisitBuilder",
+    "role" : "UNKNOWN",
+    "annotations" : [ ],
+    "annotationDetails" : [ ],
+    "dependencies" : [ "VisitBuilder", "Visit" ],
+    "fields" : [ {
+      "fieldName" : "id",
+      "fieldType" : "Integer",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "date",
+      "fieldType" : "Date",
+      "annotations" : [ ]
+    }, {
+      "fieldName" : "description",
+      "fieldType" : "String",
+      "annotations" : [ "Size" ]
+    }, {
+      "fieldName" : "petId",
+      "fieldType" : "int",
+      "annotations" : [ ]
+    } ],
+    "methods" : [ {
+      "methodName" : "aVisit",
+      "signature" : "public static VisitBuilder aVisit()",
+      "returnType" : "VisitBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    return new VisitBuilder();\n}"
+    }, {
+      "methodName" : "id",
+      "signature" : "public VisitBuilder id(Integer id)",
+      "returnType" : "VisitBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "id",
+        "parameterType" : "Integer",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.id = id;\n    return this;\n}"
+    }, {
+      "methodName" : "date",
+      "signature" : "public VisitBuilder date(Date date)",
+      "returnType" : "VisitBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "date",
+        "parameterType" : "Date",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.date = date;\n    return this;\n}"
+    }, {
+      "methodName" : "description",
+      "signature" : "public VisitBuilder description(String description)",
+      "returnType" : "VisitBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "description",
+        "parameterType" : "String",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.description = description;\n    return this;\n}"
+    }, {
+      "methodName" : "petId",
+      "signature" : "public VisitBuilder petId(int petId)",
+      "returnType" : "VisitBuilder",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "petId",
+        "parameterType" : "int",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    this.petId = petId;\n    return this;\n}"
+    }, {
+      "methodName" : "build",
+      "signature" : "public Visit build()",
+      "returnType" : "Visit",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ ],
+      "calls" : [ ],
+      "methodBody" : "{\n    Visit visit = new Visit();\n    visit.setId(id);\n    visit.setDate(date);\n    visit.setDescription(description);\n    visit.setPetId(petId);\n    return visit;\n}"
+    } ],
+    "constructors" : [ {
+      "signature" : "private VisitBuilder()",
+      "annotations" : [ ],
+      "parameters" : [ ]
+    } ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  }, {
+    "packageName" : "org.springframework.samples.petclinic.visits",
+    "className" : "VisitsServiceApplication",
+    "role" : "CONFIGURATION",
+    "annotations" : [ "EnableDiscoveryClient", "SpringBootApplication" ],
+    "annotationDetails" : [ {
+      "name" : "EnableDiscoveryClient",
+      "attributes" : { }
+    }, {
+      "name" : "SpringBootApplication",
+      "attributes" : { }
+    } ],
+    "dependencies" : [ ],
+    "fields" : [ ],
+    "methods" : [ {
+      "methodName" : "main",
+      "signature" : "public static void main(String[] args)",
+      "returnType" : "void",
+      "annotations" : [ ],
+      "annotationDetails" : [ ],
+      "parameters" : [ {
+        "parameterName" : "args",
+        "parameterType" : "String[]",
+        "annotations" : [ ]
+      } ],
+      "calls" : [ ],
+      "methodBody" : "{\n    SpringApplication.run(VisitsServiceApplication.class, args);\n}"
+    } ],
+    "constructors" : [ ],
+    "extendedTypes" : [ ],
+    "implementedTypes" : [ ],
+    "calledServices" : [ ]
+  } ],
+  "projectClassNames" : [ "ApiGatewayController", "MetricConfig", "OwnerResource", "Owner", "ApiGatewayApplication", "Vet", "PetclinicTools", "Visit", "GenAIServiceApplication", "VisitRepository", "PetType", "Mapper", "OwnerEntityMapper", "PetResource", "VectorStoreController", "CustomersServiceClient", "ResourceNotFoundException", "OwnerRepository", "VisitResource", "VetsServiceApplication", "CacheConfig", "VisitsServiceApplication", "ConfigServerApplication", "VisitsServiceClient", "DiscoveryServerApplication", "SpringBootAdminApplication", "VetResource", "AIBeanConfiguration", "PetRepository", "PetDetailsBuilder", "OwnerDetailsBuilder", "Specialty", "CustomersServiceApplication", "PetclinicChatClient", "AIDataProvider", "VetRepository", "Pet", "FallbackController", "VisitBuilder" ],
+  "architectureKnowledge" : {
+    "relations" : [ {
+      "source" : "PetclinicTools",
+      "target" : "AIDataProvider",
+      "relationType" : "INJECTS"
+    }, {
+      "source" : "PetclinicTools",
+      "target" : "Vet",
+      "relationType" : "USES"
+    }, {
+      "source" : "AIDataProvider",
+      "target" : "Vet",
+      "relationType" : "USES"
+    }, {
+      "source" : "VectorStoreController",
+      "target" : "Vet",
+      "relationType" : "USES"
+    }, {
+      "source" : "PetclinicChatClient",
+      "target" : "PetclinicTools",
+      "relationType" : "INJECTS"
+    }, {
+      "source" : "VetResource",
+      "target" : "VetRepository",
+      "relationType" : "INJECTS"
+    }, {
+      "source" : "VetResource",
+      "target" : "Vet",
+      "relationType" : "USES"
+    }, {
+      "source" : "Vet",
+      "target" : "Specialty",
+      "relationType" : "MANY_TO_MANY"
+    }, {
+      "source" : "VetRepository",
+      "target" : "Vet",
+      "relationType" : "MANAGES"
+    }, {
+      "source" : "PetDetailsBuilder",
+      "target" : "PetType",
+      "relationType" : "USES"
+    }, {
+      "source" : "ApiGatewayController",
+      "target" : "CustomersServiceClient",
+      "relationType" : "INJECTS"
+    }, {
+      "source" : "ApiGatewayController",
+      "target" : "VisitsServiceClient",
+      "relationType" : "INJECTS"
+    }, {
+      "source" : "PetResource",
+      "target" : "PetRepository",
+      "relationType" : "INJECTS"
+    }, {
+      "source" : "PetResource",
+      "target" : "OwnerRepository",
+      "relationType" : "INJECTS"
+    }, {
+      "source" : "PetResource",
+      "target" : "PetType",
+      "relationType" : "USES"
+    }, {
+      "source" : "PetResource",
+      "target" : "Pet",
+      "relationType" : "USES"
+    }, {
+      "source" : "OwnerEntityMapper",
+      "target" : "Mapper",
+      "relationType" : "IMPLEMENTS"
+    }, {
+      "source" : "OwnerEntityMapper",
+      "target" : "Owner",
+      "relationType" : "USES"
+    }, {
+      "source" : "OwnerResource",
+      "target" : "OwnerRepository",
+      "relationType" : "INJECTS"
+    }, {
+      "source" : "OwnerResource",
+      "target" : "OwnerEntityMapper",
+      "relationType" : "INJECTS"
+    }, {
+      "source" : "OwnerResource",
+      "target" : "Owner",
+      "relationType" : "USES"
+    }, {
+      "source" : "Pet",
+      "target" : "PetType",
+      "relationType" : "MANY_TO_ONE"
+    }, {
+      "source" : "Pet",
+      "target" : "Owner",
+      "relationType" : "MANY_TO_ONE"
+    }, {
+      "source" : "PetRepository",
+      "target" : "Pet",
+      "relationType" : "MANAGES"
+    }, {
+      "source" : "PetRepository",
+      "target" : "PetType",
+      "relationType" : "USES"
+    }, {
+      "source" : "OwnerRepository",
+      "target" : "Owner",
+      "relationType" : "MANAGES"
+    }, {
+      "source" : "Owner",
+      "target" : "Pet",
+      "relationType" : "ONE_TO_MANY"
+    }, {
+      "source" : "VisitResource",
+      "target" : "VisitRepository",
+      "relationType" : "INJECTS"
+    }, {
+      "source" : "VisitResource",
+      "target" : "Visit",
+      "relationType" : "USES"
+    }, {
+      "source" : "VisitRepository",
+      "target" : "Visit",
+      "relationType" : "MANAGES"
+    }, {
+      "source" : "VisitBuilder",
+      "target" : "Visit",
+      "relationType" : "USES"
+    } ]
+  }
+}

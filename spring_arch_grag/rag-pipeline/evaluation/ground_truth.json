@@ -1,0 +1,182 @@
+[
+  {
+    "question": "What annotations does OwnerController have?",
+    "ground_truth": "OwnerController is annotated with @Controller only — it has no class-level @RequestMapping. It returns view names (Thymeleaf templates) and a ModelAndView rather than JSON, unlike a @RestController. Each handler method carries its own full path via @GetMapping/@PostMapping, e.g. @GetMapping(\"/owners/new\"), @GetMapping(\"/owners/{ownerId}\").",
+    "category": "single-class"
+  },
+  {
+    "question": "What is the role of VetController in the application?",
+    "ground_truth": "VetController is a @Controller. Most methods return view names; only showResourcesVetList() (GET /vets) uses @ResponseBody to return JSON.",
+    "category": "single-class"
+  },
+  {
+    "question": "Which fields does Owner have?",
+    "ground_truth": "Owner has fields such as firstName, lastName, address, city, telephone, and a collection of pets.",
+    "category": "single-class"
+  },
+  {
+    "question": "What annotations are on the Pet entity?",
+    "ground_truth": "Pet is annotated with @Entity and @Table(name = \"pets\").",
+    "category": "single-class"
+  },
+  {
+    "question": "What is the return type of the findAll method in VetRepository?",
+    "ground_truth": "The findAll method in VetRepository returns a Collection or List of Vet objects.",
+    "category": "single-class"
+  },
+  {
+    "question": "What package does OwnerController belong to?",
+    "ground_truth": "OwnerController belongs to the org.springframework.samples.petclinic.owner package.",
+    "category": "single-class"
+  },
+  {
+    "question": "What methods does VisitController expose?",
+    "ground_truth": "VisitController exposes methods for showing and processing a new-visit form; it has no listing method.",
+    "category": "single-class"
+  },
+  {
+    "question": "What fields does Visit have?",
+    "ground_truth": "Visit has fields date and description (inherited id from BaseEntity). It holds no reference back to Pet — Pet holds the Set<Visit>.",
+    "category": "single-class"
+  },
+  {
+    "question": "Which repository does OwnerController depend on?",
+    "ground_truth": "OwnerController depends on OwnerRepository, injected via constructor.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "Which service or repository does VisitController use?",
+    "ground_truth": "VisitController uses OwnerRepository only — it loads the Owner/Pet via owners.findById() and persists via owners.save(owner). There is no VisitRepository or PetRepository.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "What does VetRepository manage?",
+    "ground_truth": "VetRepository manages the Vet entity.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "Which layer does OwnerRepository belong to?",
+    "ground_truth": "OwnerRepository belongs to the repository layer.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "Which classes inject OwnerRepository?",
+    "ground_truth": "OwnerController, PetController, and VisitController all inject OwnerRepository.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "What is the dependency between PetController and PetRepository?",
+    "ground_truth": "PetController injects OwnerRepository and PetTypeRepository via constructor — there is no PetRepository.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "Which controllers belong to the controller layer?",
+    "ground_truth": "OwnerController, VetController, VisitController, PetController, CrashController, and WelcomeController belong to the controller layer.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "What classes depend on the service layer?",
+    "ground_truth": "No classes — petclinic has no service layer; controllers inject repositories directly.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "What is the JPA relationship between Owner and Pet?",
+    "ground_truth": "Owner has a OneToMany relationship with Pet.",
+    "category": "jpa"
+  },
+  {
+    "question": "What is the relationship between Pet and Visit?",
+    "ground_truth": "Pet has a OneToMany relationship with Visit.",
+    "category": "jpa"
+  },
+  {
+    "question": "What entity does PetRepository manage?",
+    "ground_truth": "There is no PetRepository. Pet entities are persisted transitively via OwnerRepository (Owner is the aggregate root).",
+    "category": "jpa"
+  },
+  {
+    "question": "Does Pet extend any base class?",
+    "ground_truth": "Pet extends NamedEntity or BaseEntity.",
+    "category": "jpa"
+  },
+  {
+    "question": "What is the relationship between Vet and Specialty?",
+    "ground_truth": "Vet has a ManyToMany relationship with Specialty.",
+    "category": "jpa"
+  },
+  {
+    "question": "Which entities are managed by the repository layer?",
+    "ground_truth": "Owner (OwnerRepository), PetType (PetTypeRepository), and Vet (VetRepository) have dedicated repositories. Pet and Visit have none — they're persisted via Owner.",
+    "category": "jpa"
+  },
+  {
+    "question": "What inherits from BaseEntity in the application?",
+    "ground_truth": "Named entities and domain classes like Owner, Pet, Vet extend BaseEntity or NamedEntity.",
+    "category": "jpa"
+  },
+  {
+    "question": "What HTTP endpoint is exposed to list all owners?",
+    "ground_truth": "OwnerController exposes a GET /owners endpoint to list all owners.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "Trace the call chain when a new owner is created.",
+    "ground_truth": "An HTTP POST request hits OwnerController which calls OwnerRepository to persist the new Owner entity.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "Which HTTP endpoints does VetController expose?",
+    "ground_truth": "VetController exposes GET /vets.html (paginated HTML view) and GET /vets (JSON via @ResponseBody).",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "What layers are involved when retrieving a list of pets for an owner?",
+    "ground_truth": "Only OwnerController is involved — its showOwner() method (GET /owners/{ownerId}) loads the Owner via OwnerRepository, and the pets list is simply the Owner entity's JPA-managed pets collection, returned as part of the owner detail view (controller layer → OwnerRepository → entity layer: Owner, Pet). PetController is not involved — it only handles creating/editing individual pets, not listing them.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "Which methods are marked as transactional?",
+    "ground_truth": "VetRepository.findAll() and findAll(Pageable) are marked @Transactional(readOnly=true).",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "What is the full dependency path from a controller to an entity?",
+    "ground_truth": "Controller injects Repository (INJECTS), Repository manages Entity (MANAGES_ENTITY), Entity is in the entity layer (BELONGS_TO_LAYER).",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "Which endpoint handles adding a new visit for a pet?",
+    "ground_truth": "VisitController exposes a POST endpoint for creating a new visit for a pet.",
+    "category": "architectural-flow"
+  },
+  {
+    "question": "What is the role of PetTypeRepository and which entity does it manage?",
+    "ground_truth": "PetTypeRepository is a Spring Data repository extending JpaRepository<PetType, Integer>. It manages PetType entities and exposes a custom findPetTypes() method annotated with @Query that retrieves all PetType instances ordered by name.",
+    "category": "single-class"
+  },
+  {
+    "question": "What is PetType and how is it related to the Pet entity?",
+    "ground_truth": "PetType is a JPA entity annotated with @Entity and @Table that extends NamedEntity. It represents a category of pet (e.g., dog, cat). Pet has a many-to-one JPA relationship with PetType via the type field annotated @ManyToOne. PetTypeRepository provides findPetTypes() to load all available types.",
+    "category": "jpa"
+  },
+  {
+    "question": "What does CacheConfiguration configure and which annotation enables caching?",
+    "ground_truth": "CacheConfiguration is a @Configuration class annotated with @EnableCaching. It creates a JCacheManagerCustomizer bean named petclinicCacheConfigurationCustomizer that registers a 'vets' cache with statistics enabled via the JCache API.",
+    "category": "single-class"
+  },
+  {
+    "question": "Which methods in VetRepository are cached and transactional, and what do they return?",
+    "ground_truth": "VetRepository defines two findAll() methods, both annotated with @Transactional(readOnly=true) and @Cacheable(\"vets\"). One returns Collection<Vet>, the other returns Page<Vet> for pagination. Both are backed by the 'vets' cache configured in CacheConfiguration.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "What Spring beans does CacheConfiguration create?",
+    "ground_truth": "CacheConfiguration creates one bean: petclinicCacheConfigurationCustomizer of type JCacheManagerCustomizer. It configures the 'vets' JCache with statistics enabled. Spring Boot auto-configuration handles the actual CacheManager.",
+    "category": "cross-layer"
+  },
+  {
+    "question": "What is the role of Person in the class hierarchy and which classes extend it?",
+    "ground_truth": "Person is a @MappedSuperclass that extends BaseEntity, adding firstName and lastName fields. Owner and Vet both extend Person, inheriting these personal name fields alongside the id field from BaseEntity. Full chain: BaseEntity → Person → Owner and BaseEntity → Person → Vet.",
+    "category": "jpa"
+  }
+]

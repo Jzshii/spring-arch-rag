@@ -1,0 +1,1203 @@
+{
+  "nodes" : [ {
+    "id" : "CONTROLLER_LAYER",
+    "type" : "CONTROLLER_LAYER",
+    "metadata" : null
+  }, {
+    "id" : "SERVICE_LAYER",
+    "type" : "SERVICE_LAYER",
+    "metadata" : null
+  }, {
+    "id" : "REPOSITORY_LAYER",
+    "type" : "REPOSITORY_LAYER",
+    "metadata" : null
+  }, {
+    "id" : "ENTITY_LAYER",
+    "type" : "ENTITY_LAYER",
+    "metadata" : null
+  }, {
+    "id" : "CONFIGURATION_LAYER",
+    "type" : "CONFIGURATION_LAYER",
+    "metadata" : null
+  }, {
+    "id" : "COMPONENT_LAYER",
+    "type" : "COMPONENT_LAYER",
+    "metadata" : null
+  }, {
+    "id" : "ConfigServerApplication",
+    "type" : "CONFIGURATION",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.config",
+      "annotations" : "@EnableConfigServer, @SpringBootApplication",
+      "methods" : "main"
+    }
+  }, {
+    "id" : "CONFIG_SERVER",
+    "type" : "SEMANTIC_MARKER",
+    "metadata" : null
+  }, {
+    "id" : "DiscoveryServerApplication",
+    "type" : "CONFIGURATION",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.discovery",
+      "annotations" : "@SpringBootApplication, @EnableEurekaServer",
+      "methods" : "main"
+    }
+  }, {
+    "id" : "EUREKA_SERVER",
+    "type" : "SEMANTIC_MARKER",
+    "metadata" : null
+  }, {
+    "id" : "PetclinicTools",
+    "type" : "COMPONENT",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.genai",
+      "annotations" : "@Component",
+      "methods" : "listOwners, addOwnerToPetclinic, listVets, addPetToOwner"
+    }
+  }, {
+    "id" : "PetclinicTools.listOwners",
+    "type" : "METHOD",
+    "metadata" : {
+      "toolDescription" : "List the owners that the pet clinic has"
+    }
+  }, {
+    "id" : "AI_TOOL",
+    "type" : "SEMANTIC_MARKER",
+    "metadata" : null
+  }, {
+    "id" : "PetclinicTools.addOwnerToPetclinic",
+    "type" : "METHOD",
+    "metadata" : {
+      "toolDescription" : "\"\"\"\n    Add a new pet owner to the pet clinic. The Owner must include a first name and a last name\n    as two separate words,plus an address and a 10-digit phone number\n    \"\"\""
+    }
+  }, {
+    "id" : "PetclinicTools.listVets",
+    "type" : "METHOD",
+    "metadata" : {
+      "toolDescription" : "List the veterinarians that the pet clinic has"
+    }
+  }, {
+    "id" : "PetclinicTools.addPetToOwner",
+    "type" : "METHOD",
+    "metadata" : {
+      "toolDescription" : "\"\"\"\n    Add a pet with the specified petTypeId, to an owner identified by the ownerId.\n    The allowed Pet types IDs are only: 1 = cat, 2 = dog, 3 = lizard, 4 = snake, 5 = bird,\n    6 - hamster\n    \"\"\""
+    }
+  }, {
+    "id" : "AIBeanConfiguration",
+    "type" : "CONFIGURATION",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.genai",
+      "annotations" : "@Configuration",
+      "methods" : "vectorStore, loadBalancedWebClientBuilder"
+    }
+  }, {
+    "id" : "AIDataProvider",
+    "type" : "SERVICE",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.genai",
+      "annotations" : "@Service",
+      "methods" : "getAllOwners, getVets, addPetToOwner, addOwnerToPetclinic, getCustomerServiceUri"
+    }
+  }, {
+    "id" : "VectorStoreController",
+    "type" : "EVENT_LISTENER",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.genai",
+      "annotations" : "@Component",
+      "methods" : "loadVetDataToVectorStoreOnStartup, convertListToJsonResource"
+    }
+  }, {
+    "id" : "GenAIServiceApplication",
+    "type" : "CONFIGURATION",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.genai",
+      "annotations" : "@EnableDiscoveryClient, @SpringBootApplication",
+      "methods" : "main"
+    }
+  }, {
+    "id" : "SERVICE_DISCOVERY",
+    "type" : "SEMANTIC_MARKER",
+    "metadata" : null
+  }, {
+    "id" : "PetclinicChatClient",
+    "type" : "CONTROLLER",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.genai",
+      "annotations" : "@RestController, @RequestMapping",
+      "methods" : "exchange"
+    }
+  }, {
+    "id" : "POST /chatclient",
+    "type" : "ENDPOINT",
+    "metadata" : {
+      "httpMethod" : "POST",
+      "path" : "/chatclient",
+      "controller" : "PetclinicChatClient",
+      "method" : "exchange"
+    }
+  }, {
+    "id" : "SpringBootAdminApplication",
+    "type" : "CONFIGURATION",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.admin",
+      "annotations" : "@SpringBootApplication, @EnableAdminServer, @EnableDiscoveryClient",
+      "methods" : "main"
+    }
+  }, {
+    "id" : "ADMIN_SERVER",
+    "type" : "SEMANTIC_MARKER",
+    "metadata" : null
+  }, {
+    "id" : "VetResource",
+    "type" : "CONTROLLER",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.vets.web",
+      "annotations" : "@RequestMapping, @RestController",
+      "methods" : "showResourcesVetList"
+    }
+  }, {
+    "id" : "GET /vets",
+    "type" : "ENDPOINT",
+    "metadata" : {
+      "httpMethod" : "GET",
+      "path" : "/vets",
+      "controller" : "VetResource",
+      "method" : "showResourcesVetList"
+    }
+  }, {
+    "id" : "VetResource.showResourcesVetList",
+    "type" : "METHOD",
+    "metadata" : null
+  }, {
+    "id" : "CACHE",
+    "type" : "SEMANTIC_MARKER",
+    "metadata" : null
+  }, {
+    "id" : "VetsServiceApplication",
+    "type" : "CONFIGURATION",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.vets",
+      "annotations" : "@EnableDiscoveryClient, @SpringBootApplication, @EnableConfigurationProperties",
+      "methods" : "main"
+    }
+  }, {
+    "id" : "CacheConfig",
+    "type" : "CONFIGURATION",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.vets.system",
+      "annotations" : "@Configuration, @EnableCaching, @Profile"
+    }
+  }, {
+    "id" : "CACHING_ENABLED",
+    "type" : "SEMANTIC_MARKER",
+    "metadata" : null
+  }, {
+    "id" : "Vet",
+    "type" : "ENTITY",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.vets.model",
+      "annotations" : "@Entity, @Table",
+      "methods" : "getSpecialtiesInternal, getSpecialties, getNrOfSpecialties, addSpecialty, getId, getFirstName, getLastName, setId, setFirstName, setLastName"
+    }
+  }, {
+    "id" : "Specialty",
+    "type" : "ENTITY",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.vets.model",
+      "annotations" : "@Entity, @Table",
+      "methods" : "getId, getName, setName"
+    }
+  }, {
+    "id" : "VetRepository",
+    "type" : "REPOSITORY",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.vets.model"
+    }
+  }, {
+    "id" : "PetDetailsBuilder",
+    "type" : "UNKNOWN",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.api.dto",
+      "methods" : "aPetDetails, id, name, birthDate, type, visits, build"
+    }
+  }, {
+    "id" : "OwnerDetailsBuilder",
+    "type" : "UNKNOWN",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.api.dto",
+      "methods" : "anOwnerDetails, id, firstName, lastName, address, city, telephone, pets, build"
+    }
+  }, {
+    "id" : "ApiGatewayController",
+    "type" : "CONTROLLER",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.api.boundary.web",
+      "annotations" : "@RestController, @RequestMapping",
+      "methods" : "getOwnerDetails, addVisitsToOwner, emptyVisitsForPets"
+    }
+  }, {
+    "id" : "GET /api/gateway/owners/{ownerId}",
+    "type" : "ENDPOINT",
+    "metadata" : {
+      "httpMethod" : "GET",
+      "path" : "/api/gateway/owners/{ownerId}",
+      "controller" : "ApiGatewayController",
+      "method" : "getOwnerDetails"
+    }
+  }, {
+    "id" : "ApiGatewayController.getOwnerDetails",
+    "type" : "METHOD",
+    "metadata" : null
+  }, {
+    "id" : "FallbackController",
+    "type" : "CONTROLLER",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.api.boundary.web",
+      "annotations" : "@RestController",
+      "methods" : "fallback"
+    }
+  }, {
+    "id" : "POST /fallback",
+    "type" : "ENDPOINT",
+    "metadata" : {
+      "httpMethod" : "POST",
+      "path" : "/fallback",
+      "controller" : "FallbackController",
+      "method" : "fallback"
+    }
+  }, {
+    "id" : "ApiGatewayApplication",
+    "type" : "CONFIGURATION",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.api",
+      "annotations" : "@EnableDiscoveryClient, @SpringBootApplication",
+      "methods" : "main, loadBalancedRestTemplate, loadBalancedWebClientBuilder, routerFunction, defaultCustomizer"
+    }
+  }, {
+    "id" : "CustomersServiceClient",
+    "type" : "SERVICE_CLIENT",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.api.application",
+      "annotations" : "@Component",
+      "methods" : "getOwner"
+    }
+  }, {
+    "id" : "VisitsServiceClient",
+    "type" : "SERVICE_CLIENT",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.api.application",
+      "annotations" : "@Component",
+      "methods" : "getVisitsForPets, joinIds, setHostname"
+    }
+  }, {
+    "id" : "CustomersServiceApplication",
+    "type" : "CONFIGURATION",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.customers",
+      "annotations" : "@EnableDiscoveryClient, @SpringBootApplication",
+      "methods" : "main"
+    }
+  }, {
+    "id" : "org.springframework.samples.petclinic.customers.config.MetricConfig",
+    "type" : "CONFIGURATION",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.customers.config",
+      "annotations" : "@Configuration",
+      "methods" : "metricsCommonTags, timedAspect"
+    }
+  }, {
+    "id" : "ResourceNotFoundException",
+    "type" : "EXCEPTION_HANDLER",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.customers.web",
+      "annotations" : "@ResponseStatus"
+    }
+  }, {
+    "id" : "PetResource",
+    "type" : "CONTROLLER",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.customers.web",
+      "annotations" : "@RestController, @Timed",
+      "methods" : "getPetTypes, processCreationForm, processUpdateForm, save, findPet, findPetById"
+    }
+  }, {
+    "id" : "GET /petTypes",
+    "type" : "ENDPOINT",
+    "metadata" : {
+      "httpMethod" : "GET",
+      "path" : "/petTypes",
+      "controller" : "PetResource",
+      "method" : "getPetTypes"
+    }
+  }, {
+    "id" : "PetResource.getPetTypes",
+    "type" : "METHOD",
+    "metadata" : null
+  }, {
+    "id" : "POST /owners/{ownerId}/pets",
+    "type" : "ENDPOINT",
+    "metadata" : {
+      "httpMethod" : "POST",
+      "path" : "/owners/{ownerId}/pets",
+      "controller" : "PetResource",
+      "method" : "processCreationForm"
+    }
+  }, {
+    "id" : "PetResource.processCreationForm",
+    "type" : "METHOD",
+    "metadata" : null
+  }, {
+    "id" : "PUT /owners/*/pets/{petId}",
+    "type" : "ENDPOINT",
+    "metadata" : {
+      "httpMethod" : "PUT",
+      "path" : "/owners/*/pets/{petId}",
+      "controller" : "PetResource",
+      "method" : "processUpdateForm"
+    }
+  }, {
+    "id" : "PetResource.save",
+    "type" : "METHOD",
+    "metadata" : null
+  }, {
+    "id" : "GET owners/*/pets/{petId}",
+    "type" : "ENDPOINT",
+    "metadata" : {
+      "httpMethod" : "GET",
+      "path" : "owners/*/pets/{petId}",
+      "controller" : "PetResource",
+      "method" : "findPet"
+    }
+  }, {
+    "id" : "PetResource.findPetById",
+    "type" : "METHOD",
+    "metadata" : null
+  }, {
+    "id" : "Mapper",
+    "type" : "UNKNOWN",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.customers.web.mapper",
+      "methods" : "map"
+    }
+  }, {
+    "id" : "OwnerEntityMapper",
+    "type" : "COMPONENT",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.customers.web.mapper",
+      "annotations" : "@Component",
+      "methods" : "map"
+    }
+  }, {
+    "id" : "OwnerResource",
+    "type" : "CONTROLLER",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.customers.web",
+      "annotations" : "@RequestMapping, @RestController, @Timed",
+      "methods" : "createOwner, findOwner, findAll, updateOwner"
+    }
+  }, {
+    "id" : "POST /owners",
+    "type" : "ENDPOINT",
+    "metadata" : {
+      "httpMethod" : "POST",
+      "path" : "/owners",
+      "controller" : "OwnerResource",
+      "method" : "createOwner"
+    }
+  }, {
+    "id" : "OwnerResource.createOwner",
+    "type" : "METHOD",
+    "metadata" : null
+  }, {
+    "id" : "GET /owners/{ownerId}",
+    "type" : "ENDPOINT",
+    "metadata" : {
+      "httpMethod" : "GET",
+      "path" : "/owners/{ownerId}",
+      "controller" : "OwnerResource",
+      "method" : "findOwner"
+    }
+  }, {
+    "id" : "OwnerResource.findOwner",
+    "type" : "METHOD",
+    "metadata" : null
+  }, {
+    "id" : "GET /owners",
+    "type" : "ENDPOINT",
+    "metadata" : {
+      "httpMethod" : "GET",
+      "path" : "/owners",
+      "controller" : "OwnerResource",
+      "method" : "findAll"
+    }
+  }, {
+    "id" : "OwnerResource.findAll",
+    "type" : "METHOD",
+    "metadata" : null
+  }, {
+    "id" : "PUT /owners/{ownerId}",
+    "type" : "ENDPOINT",
+    "metadata" : {
+      "httpMethod" : "PUT",
+      "path" : "/owners/{ownerId}",
+      "controller" : "OwnerResource",
+      "method" : "updateOwner"
+    }
+  }, {
+    "id" : "OwnerResource.updateOwner",
+    "type" : "METHOD",
+    "metadata" : null
+  }, {
+    "id" : "Pet",
+    "type" : "ENTITY",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.customers.model",
+      "annotations" : "@Entity, @Table",
+      "methods" : "toString, getId, getName, getBirthDate, getType, getOwner, setId, setName, setBirthDate, setType, setOwner, equals, hashCode"
+    }
+  }, {
+    "id" : "PetRepository",
+    "type" : "REPOSITORY",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.customers.model",
+      "methods" : "findPetTypes, findPetTypeById"
+    }
+  }, {
+    "id" : "OwnerRepository",
+    "type" : "REPOSITORY",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.customers.model"
+    }
+  }, {
+    "id" : "Owner",
+    "type" : "ENTITY",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.customers.model",
+      "annotations" : "@Entity, @Table",
+      "methods" : "getPetsInternal, getPets, addPet, toString, getId, getFirstName, getLastName, getAddress, getCity, getTelephone, setFirstName, setLastName, setAddress, setCity, setTelephone"
+    }
+  }, {
+    "id" : "PetType",
+    "type" : "ENTITY",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.customers.model",
+      "annotations" : "@Entity, @Table",
+      "methods" : "getId, getName, setId, setName"
+    }
+  }, {
+    "id" : "org.springframework.samples.petclinic.visits.config.MetricConfig",
+    "type" : "CONFIGURATION",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.visits.config",
+      "annotations" : "@Configuration",
+      "methods" : "metricsCommonTags, timedAspect"
+    }
+  }, {
+    "id" : "VisitResource",
+    "type" : "CONTROLLER",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.visits.web",
+      "annotations" : "@RestController, @Timed",
+      "methods" : "create, read, read"
+    }
+  }, {
+    "id" : "POST owners/*/pets/{petId}/visits",
+    "type" : "ENDPOINT",
+    "metadata" : {
+      "httpMethod" : "POST",
+      "path" : "owners/*/pets/{petId}/visits",
+      "controller" : "VisitResource",
+      "method" : "create"
+    }
+  }, {
+    "id" : "VisitResource.create",
+    "type" : "METHOD",
+    "metadata" : null
+  }, {
+    "id" : "GET owners/*/pets/{petId}/visits",
+    "type" : "ENDPOINT",
+    "metadata" : {
+      "httpMethod" : "GET",
+      "path" : "owners/*/pets/{petId}/visits",
+      "controller" : "VisitResource",
+      "method" : "read"
+    }
+  }, {
+    "id" : "VisitResource.read",
+    "type" : "METHOD",
+    "metadata" : null
+  }, {
+    "id" : "GET pets/visits",
+    "type" : "ENDPOINT",
+    "metadata" : {
+      "httpMethod" : "GET",
+      "path" : "pets/visits",
+      "controller" : "VisitResource",
+      "method" : "read"
+    }
+  }, {
+    "id" : "VisitRepository",
+    "type" : "REPOSITORY",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.visits.model",
+      "methods" : "findByPetId, findByPetIdIn"
+    }
+  }, {
+    "id" : "Visit",
+    "type" : "ENTITY",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.visits.model",
+      "annotations" : "@Entity, @Table",
+      "methods" : "getId, getDate, getDescription, getPetId, setId, setDate, setDescription, setPetId"
+    }
+  }, {
+    "id" : "VisitBuilder",
+    "type" : "UNKNOWN",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.visits.model",
+      "methods" : "aVisit, id, date, description, petId, build"
+    }
+  }, {
+    "id" : "VisitsServiceApplication",
+    "type" : "CONFIGURATION",
+    "metadata" : {
+      "packageName" : "org.springframework.samples.petclinic.visits",
+      "annotations" : "@EnableDiscoveryClient, @SpringBootApplication",
+      "methods" : "main"
+    }
+  } ],
+  "relations" : [ {
+    "source" : "ConfigServerApplication",
+    "target" : "CONFIGURATION_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "ConfigServerApplication",
+    "target" : "CONFIG_SERVER",
+    "relationType" : "HAS_SEMANTIC"
+  }, {
+    "source" : "DiscoveryServerApplication",
+    "target" : "CONFIGURATION_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "DiscoveryServerApplication",
+    "target" : "EUREKA_SERVER",
+    "relationType" : "HAS_SEMANTIC"
+  }, {
+    "source" : "PetclinicTools",
+    "target" : "COMPONENT_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "PetclinicTools",
+    "target" : "AIDataProvider",
+    "relationType" : "INJECTS"
+  }, {
+    "source" : "PetclinicTools",
+    "target" : "AIDataProvider",
+    "relationType" : "USES"
+  }, {
+    "source" : "PetclinicTools.listOwners",
+    "target" : "AI_TOOL",
+    "relationType" : "HAS_SEMANTIC"
+  }, {
+    "source" : "PetclinicTools.listOwners",
+    "target" : "AIDataProvider.getAllOwners",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "PetclinicTools.addOwnerToPetclinic",
+    "target" : "AI_TOOL",
+    "relationType" : "HAS_SEMANTIC"
+  }, {
+    "source" : "PetclinicTools.addOwnerToPetclinic",
+    "target" : "AIDataProvider.addOwnerToPetclinic",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "PetclinicTools",
+    "target" : "Vet",
+    "relationType" : "ACCEPTS_PARAMETER"
+  }, {
+    "source" : "PetclinicTools.listVets",
+    "target" : "AI_TOOL",
+    "relationType" : "HAS_SEMANTIC"
+  }, {
+    "source" : "PetclinicTools.listVets",
+    "target" : "AIDataProvider.getVets",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "PetclinicTools.addPetToOwner",
+    "target" : "AI_TOOL",
+    "relationType" : "HAS_SEMANTIC"
+  }, {
+    "source" : "PetclinicTools.addPetToOwner",
+    "target" : "AIDataProvider.addPetToOwner",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "AIBeanConfiguration",
+    "target" : "CONFIGURATION_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "AIBeanConfiguration",
+    "target" : "VectorStore",
+    "relationType" : "CREATES_BEAN"
+  }, {
+    "source" : "AIBeanConfiguration",
+    "target" : "WebClient.Builder",
+    "relationType" : "CREATES_BEAN"
+  }, {
+    "source" : "AIDataProvider",
+    "target" : "SERVICE_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "AIDataProvider",
+    "target" : "Vet",
+    "relationType" : "ACCEPTS_PARAMETER"
+  }, {
+    "source" : "VectorStoreController",
+    "target" : "Vet",
+    "relationType" : "ACCEPTS_PARAMETER"
+  }, {
+    "source" : "GenAIServiceApplication",
+    "target" : "CONFIGURATION_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "GenAIServiceApplication",
+    "target" : "SERVICE_DISCOVERY",
+    "relationType" : "HAS_SEMANTIC"
+  }, {
+    "source" : "PetclinicChatClient",
+    "target" : "CONTROLLER_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "PetclinicChatClient",
+    "target" : "PetclinicTools",
+    "relationType" : "INJECTS"
+  }, {
+    "source" : "PetclinicChatClient",
+    "target" : "POST /chatclient",
+    "relationType" : "EXPOSES_ENDPOINT"
+  }, {
+    "source" : "SpringBootAdminApplication",
+    "target" : "CONFIGURATION_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "SpringBootAdminApplication",
+    "target" : "SERVICE_DISCOVERY",
+    "relationType" : "HAS_SEMANTIC"
+  }, {
+    "source" : "SpringBootAdminApplication",
+    "target" : "ADMIN_SERVER",
+    "relationType" : "HAS_SEMANTIC"
+  }, {
+    "source" : "VetResource",
+    "target" : "CONTROLLER_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "VetResource",
+    "target" : "VetRepository",
+    "relationType" : "INJECTS"
+  }, {
+    "source" : "VetResource",
+    "target" : "VetRepository",
+    "relationType" : "USES"
+  }, {
+    "source" : "VetResource",
+    "target" : "Vet",
+    "relationType" : "RETURNS"
+  }, {
+    "source" : "VetResource",
+    "target" : "GET /vets",
+    "relationType" : "EXPOSES_ENDPOINT"
+  }, {
+    "source" : "VetResource.showResourcesVetList",
+    "target" : "CACHE",
+    "relationType" : "HAS_SEMANTIC"
+  }, {
+    "source" : "VetResource.showResourcesVetList",
+    "target" : "VetRepository.findAll",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "VetsServiceApplication",
+    "target" : "CONFIGURATION_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "VetsServiceApplication",
+    "target" : "SERVICE_DISCOVERY",
+    "relationType" : "HAS_SEMANTIC"
+  }, {
+    "source" : "CacheConfig",
+    "target" : "CONFIGURATION_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "CacheConfig",
+    "target" : "CACHING_ENABLED",
+    "relationType" : "HAS_SEMANTIC"
+  }, {
+    "source" : "Vet",
+    "target" : "ENTITY_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "Vet",
+    "target" : "Specialty",
+    "relationType" : "MANY_TO_MANY"
+  }, {
+    "source" : "Vet",
+    "target" : "Specialty",
+    "relationType" : "RETURNS"
+  }, {
+    "source" : "Vet",
+    "target" : "Specialty",
+    "relationType" : "ACCEPTS_PARAMETER"
+  }, {
+    "source" : "Specialty",
+    "target" : "ENTITY_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "VetRepository",
+    "target" : "REPOSITORY_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "VetRepository",
+    "target" : "Vet",
+    "relationType" : "MANAGES_ENTITY"
+  }, {
+    "source" : "PetDetailsBuilder",
+    "target" : "PetType",
+    "relationType" : "USES"
+  }, {
+    "source" : "PetDetailsBuilder",
+    "target" : "PetType",
+    "relationType" : "ACCEPTS_PARAMETER"
+  }, {
+    "source" : "ApiGatewayController",
+    "target" : "CONTROLLER_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "ApiGatewayController",
+    "target" : "CustomersServiceClient",
+    "relationType" : "INJECTS"
+  }, {
+    "source" : "ApiGatewayController",
+    "target" : "VisitsServiceClient",
+    "relationType" : "INJECTS"
+  }, {
+    "source" : "ApiGatewayController",
+    "target" : "CustomersServiceClient",
+    "relationType" : "USES"
+  }, {
+    "source" : "ApiGatewayController",
+    "target" : "VisitsServiceClient",
+    "relationType" : "USES"
+  }, {
+    "source" : "ApiGatewayController",
+    "target" : "ReactiveCircuitBreakerFactory",
+    "relationType" : "USES_CIRCUIT_BREAKER"
+  }, {
+    "source" : "ApiGatewayController",
+    "target" : "GET /api/gateway/owners/{ownerId}",
+    "relationType" : "EXPOSES_ENDPOINT"
+  }, {
+    "source" : "ApiGatewayController.getOwnerDetails",
+    "target" : "CustomersServiceClient.getOwner",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "ApiGatewayController.getOwnerDetails",
+    "target" : "VisitsServiceClient.getVisitsForPets",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "FallbackController",
+    "target" : "CONTROLLER_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "FallbackController",
+    "target" : "POST /fallback",
+    "relationType" : "EXPOSES_ENDPOINT"
+  }, {
+    "source" : "ApiGatewayApplication",
+    "target" : "CONFIGURATION_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "ApiGatewayApplication",
+    "target" : "SERVICE_DISCOVERY",
+    "relationType" : "HAS_SEMANTIC"
+  }, {
+    "source" : "ApiGatewayApplication",
+    "target" : "RestTemplate",
+    "relationType" : "CREATES_BEAN"
+  }, {
+    "source" : "ApiGatewayApplication",
+    "target" : "WebClient.Builder",
+    "relationType" : "CREATES_BEAN"
+  }, {
+    "source" : "ApiGatewayApplication",
+    "target" : "RouterFunction",
+    "relationType" : "CREATES_BEAN"
+  }, {
+    "source" : "ApiGatewayApplication",
+    "target" : "Customizer",
+    "relationType" : "CREATES_BEAN"
+  }, {
+    "source" : "CustomersServiceApplication",
+    "target" : "CONFIGURATION_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "CustomersServiceApplication",
+    "target" : "SERVICE_DISCOVERY",
+    "relationType" : "HAS_SEMANTIC"
+  }, {
+    "source" : "org.springframework.samples.petclinic.customers.config.MetricConfig",
+    "target" : "CONFIGURATION_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "org.springframework.samples.petclinic.customers.config.MetricConfig",
+    "target" : "MeterRegistryCustomizer",
+    "relationType" : "CREATES_BEAN"
+  }, {
+    "source" : "org.springframework.samples.petclinic.customers.config.MetricConfig",
+    "target" : "TimedAspect",
+    "relationType" : "CREATES_BEAN"
+  }, {
+    "source" : "PetResource",
+    "target" : "CONTROLLER_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "PetResource",
+    "target" : "PetRepository",
+    "relationType" : "INJECTS"
+  }, {
+    "source" : "PetResource",
+    "target" : "OwnerRepository",
+    "relationType" : "INJECTS"
+  }, {
+    "source" : "PetResource",
+    "target" : "PetRepository",
+    "relationType" : "USES"
+  }, {
+    "source" : "PetResource",
+    "target" : "OwnerRepository",
+    "relationType" : "USES"
+  }, {
+    "source" : "PetResource",
+    "target" : "PetType",
+    "relationType" : "RETURNS"
+  }, {
+    "source" : "PetResource",
+    "target" : "GET /petTypes",
+    "relationType" : "EXPOSES_ENDPOINT"
+  }, {
+    "source" : "PetResource.getPetTypes",
+    "target" : "PetRepository.findPetTypes",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "PetResource",
+    "target" : "Pet",
+    "relationType" : "RETURNS"
+  }, {
+    "source" : "PetResource",
+    "target" : "POST /owners/{ownerId}/pets",
+    "relationType" : "EXPOSES_ENDPOINT"
+  }, {
+    "source" : "PetResource.processCreationForm",
+    "target" : "OwnerRepository.findById",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "PetResource",
+    "target" : "PUT /owners/*/pets/{petId}",
+    "relationType" : "EXPOSES_ENDPOINT"
+  }, {
+    "source" : "PetResource",
+    "target" : "Pet",
+    "relationType" : "ACCEPTS_PARAMETER"
+  }, {
+    "source" : "PetResource.save",
+    "target" : "PetRepository.findPetTypeById",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "PetResource.save",
+    "target" : "PetRepository.save",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "PetResource",
+    "target" : "GET owners/*/pets/{petId}",
+    "relationType" : "EXPOSES_ENDPOINT"
+  }, {
+    "source" : "PetResource.findPetById",
+    "target" : "PetRepository.findById",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "OwnerEntityMapper",
+    "target" : "COMPONENT_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "OwnerEntityMapper",
+    "target" : "Mapper",
+    "relationType" : "IMPLEMENTS"
+  }, {
+    "source" : "OwnerEntityMapper",
+    "target" : "Owner",
+    "relationType" : "RETURNS"
+  }, {
+    "source" : "OwnerEntityMapper",
+    "target" : "Owner",
+    "relationType" : "ACCEPTS_PARAMETER"
+  }, {
+    "source" : "OwnerResource",
+    "target" : "CONTROLLER_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "OwnerResource",
+    "target" : "OwnerRepository",
+    "relationType" : "INJECTS"
+  }, {
+    "source" : "OwnerResource",
+    "target" : "OwnerEntityMapper",
+    "relationType" : "INJECTS"
+  }, {
+    "source" : "OwnerResource",
+    "target" : "OwnerRepository",
+    "relationType" : "USES"
+  }, {
+    "source" : "OwnerResource",
+    "target" : "OwnerEntityMapper",
+    "relationType" : "USES"
+  }, {
+    "source" : "OwnerResource",
+    "target" : "Owner",
+    "relationType" : "RETURNS"
+  }, {
+    "source" : "OwnerResource",
+    "target" : "POST /owners",
+    "relationType" : "EXPOSES_ENDPOINT"
+  }, {
+    "source" : "OwnerResource.createOwner",
+    "target" : "OwnerEntityMapper.map",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "OwnerResource.createOwner",
+    "target" : "OwnerRepository.save",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "OwnerResource",
+    "target" : "GET /owners/{ownerId}",
+    "relationType" : "EXPOSES_ENDPOINT"
+  }, {
+    "source" : "OwnerResource.findOwner",
+    "target" : "OwnerRepository.findById",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "OwnerResource",
+    "target" : "GET /owners",
+    "relationType" : "EXPOSES_ENDPOINT"
+  }, {
+    "source" : "OwnerResource.findAll",
+    "target" : "OwnerRepository.findAll",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "OwnerResource",
+    "target" : "PUT /owners/{ownerId}",
+    "relationType" : "EXPOSES_ENDPOINT"
+  }, {
+    "source" : "OwnerResource.updateOwner",
+    "target" : "OwnerRepository.findById",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "OwnerResource.updateOwner",
+    "target" : "OwnerEntityMapper.map",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "OwnerResource.updateOwner",
+    "target" : "OwnerRepository.save",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "Pet",
+    "target" : "ENTITY_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "Pet",
+    "target" : "PetType",
+    "relationType" : "MANY_TO_ONE"
+  }, {
+    "source" : "Pet",
+    "target" : "Owner",
+    "relationType" : "MANY_TO_ONE"
+  }, {
+    "source" : "Pet",
+    "target" : "PetType",
+    "relationType" : "RETURNS"
+  }, {
+    "source" : "Pet",
+    "target" : "Owner",
+    "relationType" : "RETURNS"
+  }, {
+    "source" : "Pet",
+    "target" : "PetType",
+    "relationType" : "ACCEPTS_PARAMETER"
+  }, {
+    "source" : "Pet",
+    "target" : "Owner",
+    "relationType" : "ACCEPTS_PARAMETER"
+  }, {
+    "source" : "PetRepository",
+    "target" : "REPOSITORY_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "PetRepository",
+    "target" : "Pet",
+    "relationType" : "MANAGES_ENTITY"
+  }, {
+    "source" : "PetRepository",
+    "target" : "PetType",
+    "relationType" : "MANAGES_ENTITY"
+  }, {
+    "source" : "PetRepository",
+    "target" : "PetType",
+    "relationType" : "RETURNS"
+  }, {
+    "source" : "OwnerRepository",
+    "target" : "REPOSITORY_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "OwnerRepository",
+    "target" : "Owner",
+    "relationType" : "MANAGES_ENTITY"
+  }, {
+    "source" : "Owner",
+    "target" : "ENTITY_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "Owner",
+    "target" : "Pet",
+    "relationType" : "ONE_TO_MANY"
+  }, {
+    "source" : "Owner",
+    "target" : "Pet",
+    "relationType" : "RETURNS"
+  }, {
+    "source" : "Owner",
+    "target" : "Pet",
+    "relationType" : "ACCEPTS_PARAMETER"
+  }, {
+    "source" : "PetType",
+    "target" : "ENTITY_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "org.springframework.samples.petclinic.visits.config.MetricConfig",
+    "target" : "CONFIGURATION_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "org.springframework.samples.petclinic.visits.config.MetricConfig",
+    "target" : "MeterRegistryCustomizer",
+    "relationType" : "CREATES_BEAN"
+  }, {
+    "source" : "org.springframework.samples.petclinic.visits.config.MetricConfig",
+    "target" : "TimedAspect",
+    "relationType" : "CREATES_BEAN"
+  }, {
+    "source" : "VisitResource",
+    "target" : "CONTROLLER_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "VisitResource",
+    "target" : "VisitRepository",
+    "relationType" : "INJECTS"
+  }, {
+    "source" : "VisitResource",
+    "target" : "VisitRepository",
+    "relationType" : "USES"
+  }, {
+    "source" : "VisitResource",
+    "target" : "Visit",
+    "relationType" : "RETURNS"
+  }, {
+    "source" : "VisitResource",
+    "target" : "Visit",
+    "relationType" : "ACCEPTS_PARAMETER"
+  }, {
+    "source" : "VisitResource",
+    "target" : "POST owners/*/pets/{petId}/visits",
+    "relationType" : "EXPOSES_ENDPOINT"
+  }, {
+    "source" : "VisitResource.create",
+    "target" : "VisitRepository.save",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "VisitResource",
+    "target" : "GET owners/*/pets/{petId}/visits",
+    "relationType" : "EXPOSES_ENDPOINT"
+  }, {
+    "source" : "VisitResource.read",
+    "target" : "VisitRepository.findByPetId",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "VisitResource.read",
+    "target" : "VisitRepository.findByPetIdIn",
+    "relationType" : "CALLS"
+  }, {
+    "source" : "VisitResource",
+    "target" : "GET pets/visits",
+    "relationType" : "EXPOSES_ENDPOINT"
+  }, {
+    "source" : "VisitRepository",
+    "target" : "REPOSITORY_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "VisitRepository",
+    "target" : "Visit",
+    "relationType" : "MANAGES_ENTITY"
+  }, {
+    "source" : "VisitRepository",
+    "target" : "Visit",
+    "relationType" : "RETURNS"
+  }, {
+    "source" : "Visit",
+    "target" : "ENTITY_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "VisitBuilder",
+    "target" : "Visit",
+    "relationType" : "RETURNS"
+  }, {
+    "source" : "VisitsServiceApplication",
+    "target" : "CONFIGURATION_LAYER",
+    "relationType" : "BELONGS_TO_LAYER"
+  }, {
+    "source" : "VisitsServiceApplication",
+    "target" : "SERVICE_DISCOVERY",
+    "relationType" : "HAS_SEMANTIC"
+  }, {
+    "source" : "AIDataProvider",
+    "target" : "GET /owners",
+    "relationType" : "CALLS_SERVICE"
+  }, {
+    "source" : "AIDataProvider",
+    "target" : "POST /owners/{ownerId}/pets",
+    "relationType" : "CALLS_SERVICE"
+  }, {
+    "source" : "AIDataProvider",
+    "target" : "POST /owners",
+    "relationType" : "CALLS_SERVICE"
+  }, {
+    "source" : "VectorStoreController",
+    "target" : "GET /vets",
+    "relationType" : "CALLS_SERVICE"
+  }, {
+    "source" : "CustomersServiceClient",
+    "target" : "GET /owners/{ownerId}",
+    "relationType" : "CALLS_SERVICE"
+  }, {
+    "source" : "VisitsServiceClient",
+    "target" : "GET pets/visits",
+    "relationType" : "CALLS_SERVICE"
+  }, {
+    "source" : "COMPONENT_LAYER",
+    "target" : "SERVICE_LAYER",
+    "relationType" : "DEPENDS_ON_LAYER"
+  }, {
+    "source" : "CONTROLLER_LAYER",
+    "target" : "COMPONENT_LAYER",
+    "relationType" : "DEPENDS_ON_LAYER"
+  }, {
+    "source" : "CONTROLLER_LAYER",
+    "target" : "REPOSITORY_LAYER",
+    "relationType" : "DEPENDS_ON_LAYER"
+  } ]
+}
